@@ -1,0 +1,56 @@
+@use '../../fonts';
+@use '../../colors';
+
+.search {
+  height: 2.5rem;
+
+  border: 2px solid currentColor;
+
+  display: flex;
+  align-items: stretch;
+
+  .searchIcon {
+    margin: .5rem 0 .5rem .7rem;
+  }
+
+  input, button {
+    appearance: none;
+    background: none;
+    border: none;
+  }
+
+  input {
+    width: 20rem;
+    $vertical-label-offset: .03rem;
+    padding: calc(.5rem + #{$vertical-label-offset}) .7rem calc(.5rem - #{$vertical-label-offset});
+
+    color: currentColor;
+
+    &::-webkit-search-cancel-button {
+      appearance: none;
+      display: none;
+    }
+  }
+
+  button[type=submit] {
+    width: 2.5rem;
+    padding: 0;
+
+    font-size: 0;
+    @include colors.color(background, text, .9);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    &:hover {
+      @include colors.color(background, text, .8);
+    }
+
+    .submitIcon {
+      @include colors.color(color, text);
+    }
+  }
+}

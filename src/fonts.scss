@@ -1,0 +1,99 @@
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('./assets/fonts/playfair-display.woff2') format('woff2'),
+  url('./assets/fonts/playfair-display.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('./assets/fonts/playfair-display-italic.woff2') format('woff2'),
+  url('./assets/fonts/playfair-display-italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('./assets/fonts/atkinson-hyperlegible.woff2') format('woff2'),
+  url('./assets/fonts/atkinson-hyperlegible.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('./assets/fonts/atkinson-hyperlegible-italic.woff2') format('woff2'),
+  url('./assets/fonts/atkinson-hyperlegible-italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('./assets/fonts/atkinson-hyperlegible-bold.woff2') format('woff2'),
+  url('./assets/fonts/atkinson-hyperlegible-bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('./assets/fonts/atkinson-hyperlegible-bold-italic.woff2') format('woff2'),
+  url('./assets/fonts/atkinson-hyperlegible-bold-italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@mixin title {
+  font: {
+    family: 'Playfair Display', serif;
+    weight: 800;
+    size: 4.5rem;
+  }
+  line-height: 1;
+}
+
+@mixin sub-title {
+  font: {
+    family: 'Playfair Display', serif;
+    weight: 400;
+    style: italic;
+    size: 4.5rem;
+  }
+  line-height: 1;
+}
+
+@mixin heading {
+  @include title;
+  font-size: 2rem;
+}
+
+@mixin sup-heading {
+  @include sub-title;
+  font-size: 1.2rem;
+}
+
+
+@mixin heading-2 {
+  @include title;
+  font: {
+    weight: 700;
+    size: 1.2rem;
+  }
+}
+
+@mixin text {
+  font: {
+    family: 'Atkinson Hyperlegible', sans-serif;
+    weight: 400;
+    size: 1rem;
+  }
+}

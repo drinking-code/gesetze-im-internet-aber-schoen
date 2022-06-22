@@ -1,0 +1,38 @@
+@use '~normalize.css' as n;
+@use 'fonts';
+@use 'colors';
+
+body {
+  min-height: 100vh;
+
+  @include fonts.text;
+  line-height: 1.5;
+
+  @include colors.color(background, background);
+  @include colors.color(color, text);
+}
+
+a {
+  @include colors.color(color, link);
+
+  &:visited {
+    @include colors.color(color, link-visited);
+  }
+
+  &[href^=http] {
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: .1rem;
+      right: -.9rem;
+
+      height: .8em;
+      width: .8em;
+
+      background-color: currentColor;
+      mask:  url('./elements/Icon/icons/external-link.svg') no-repeat center / contain;
+    }
+  }
+}

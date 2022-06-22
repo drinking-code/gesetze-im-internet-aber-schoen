@@ -10,15 +10,20 @@ const isProduction = process.env.NODE_ENV === 'production'
 const postcssAndSass = [{
     loader: 'postcss-loader',
     options: {
-        sourceMap: !isProduction,
+        sourceMap: true,
         postcssOptions: {
             plugins: [autoprefixer],
         },
     }
 }, {
+    loader: 'resolve-url-loader',
+    options: {
+        sourceMap: true,
+    }
+}, {
     loader: 'sass-loader',
     options: {
-        sourceMap: !isProduction,
+        sourceMap: true,
         sassOptions: {
             functions: {
                 'generate-class-name($class)': function (className) {
@@ -82,7 +87,13 @@ const makeModule = () => {
                     },
                 }
             }, ...postcssAndSass]
-        },],
+        }, {
+            test: /\.svg$/i,
+            type: 'asset/inline',
+        }, {
+            test: /\.(ttf|woff2?)$/i,
+            type: 'asset/resource',
+        }],
     }
 }
 

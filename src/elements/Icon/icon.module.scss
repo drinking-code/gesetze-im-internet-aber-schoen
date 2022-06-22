@@ -1,0 +1,29 @@
+.icon {
+  height: 1.5rem;
+  width: 1.5rem;
+
+  background-color: currentColor;
+
+  mask: linear-gradient(transparent, transparent) no-repeat center / contain;
+  display: block;
+
+  &.arrowRight {
+    mask-image: url('./icons/arrow-right.svg');
+  }
+
+  &.externalLink {
+    mask-image: url('./icons/external-link.svg');
+  }
+
+  &.github {
+    mask-image: url('./icons/github.svg');
+  }
+
+  &.iCircle {
+    mask-image: url('./icons/i-circle.svg');
+  }
+
+  &.magnifyingGlass {
+    mask-image: url('./icons/magnifying-glass.svg');
+  }
+}

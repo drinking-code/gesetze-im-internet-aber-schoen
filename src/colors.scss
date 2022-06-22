@@ -1,0 +1,39 @@
+$light: (
+        background: #efece8,
+        text: #000,
+        link: #0a7aff,
+        link-visited: #5856d6,
+        marker: rgba(255, 226, 0, 0.4),
+);
+
+$dark: (
+        background: #222,
+        text: #eee,
+        link: #0a84ff,
+        link-visited: #5e56e6,
+        marker: rgba(255, 196, 0, 0.3),
+);
+
+@function light($name) {
+  @return map-get($light, $name);
+}
+
+@function dark($name) {
+  @return map-get($dark, $name);
+}
+
+@mixin color($property, $name, $transparentize: false) {
+  $color: light($name);
+  @if ($transparentize) {
+    $color: transparentize($color, $transparentize)
+  }
+  #{$property}: $color;
+
+  @media (prefers-color-scheme: dark) {
+    $color: dark($name);
+    @if ($transparentize) {
+      $color: transparentize($color, $transparentize)
+    }
+    #{$property}: $color;
+  }
+}
