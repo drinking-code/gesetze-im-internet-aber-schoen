@@ -5,6 +5,7 @@
 body {
   min-height: 100vh;
 
+  font-feature-settings: "liga" on,"rlig" on,"dlig" on,"ccmp" on,"calt" on,"kern" on;
   @include fonts.text;
   line-height: 1.5;
 

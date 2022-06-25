@@ -18,6 +18,10 @@ export default function LandingPage() {
                     <Icon className={styles.icon} icon={'i-circle'}/>
                     Über
                 </a>
+                <a href={'https://www.gesetze-im-internet.de'} target={'_blank'} rel={'noreferrer'}>
+                    <Icon className={styles.icon} icon={'bundesadler'}/>
+                    gesetze-im-internet.de
+                </a>
                 <a href={'https://github.com/drinking-code/gesetze-im-internet-aber-schoen'} target={'_blank'} rel={'noreferrer'}>
                     <Icon className={styles.icon} icon={'github'}/>
                     GitHub

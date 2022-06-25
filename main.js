@@ -1,11 +1,16 @@
 const path = require('path')
 
 const app = require('express')()
+const helmet = require('helmet')
+const shrinkRay = require('shrink-ray-current')
 const {minify} = require('html-minifier-terser')
 const PrettyError = require('pretty-error')
 const pe = new PrettyError()
 
 const minifierOptions = require('./config/html-minifier-options')
+
+// app.use(helmet())
+app.use(shrinkRay())
 
 app.use((req, res, next) => {
     const allowedSuffixes = ['.css', '.ttf', '.woff2']
@@ -22,7 +27,7 @@ app.use(async (req, res, next) => {
 
     let htmlString
     try {
-        const html = require('./build/index.js')?.default(req.path)
+        const html = require('./build/index.js')?.default(req.url)
 
         htmlString = await minify(html, minifierOptions)
         htmlString += "<!--\n\n/\\\n |\\~~|\n | \\ |\n |___|\n\n-->"

@@ -1,4 +1,5 @@
 import {Fragment} from 'react'
+import {Route, Routes} from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 
 export default function App() {
@@ -6,7 +7,9 @@ export default function App() {
         <Fragment>
             <header>
             </header>
-            <LandingPage/>
+            <Routes>
+                <Route path={'/'} exact element={<LandingPage/>}/>
+            </Routes>
         </Fragment>
     )
 }
