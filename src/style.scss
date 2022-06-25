@@ -2,15 +2,27 @@
 @use 'fonts';
 @use 'colors';
 
+html, body {
+  overflow: hidden;
+}
+
 body {
   min-height: 100vh;
 
-  font-feature-settings: "liga" on,"rlig" on,"dlig" on,"ccmp" on,"calt" on,"kern" on;
+  font-feature-settings: "liga" on, "rlig" on, "dlig" on, "ccmp" on, "calt" on, "kern" on;
   @include fonts.text;
   line-height: 1.5;
 
   @include colors.color(background, background);
   @include colors.color(color, text);
+}
+
+h1 {
+  @include fonts.title;
+}
+
+p {
+  margin: 0 0 1rem;
 }
 
 a {
@@ -33,7 +45,7 @@ a {
       width: .8em;
 
       background-color: currentColor;
-      mask:  url('./elements/Icon/icons/external-link.svg') no-repeat center / contain;
+      mask: url('./elements/Icon/icons/external-link.svg') no-repeat center / contain;
     }
   }
 }

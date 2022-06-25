@@ -1,7 +1,6 @@
 function getStructuredText(node) {
     const ast = simplifiedAst(node)
-    const jsonMarkup = astToSimpleJsonMarkup(ast)
-    return jsonMarkup
+    return astToSimpleJsonMarkup(ast)
 }
 
 function simplifiedAst(node) {
@@ -39,19 +38,25 @@ function astToSimpleJsonMarkup(ast) {
     function makeStyledJsonMarkupList(ast) {
         const keys = ast.children
             .filter(child => child.tagName === 'DT')
-            .map(child => child.children ? child.children[0].text : '')
+            .map(child => child.text)
         const values = ast.children
             .filter(child => child.tagName === 'DD')
             .map(child => astToSimpleJsonMarkup(child.children[0]))
         return {
             type: 'list',
-            content: Object.fromEntries(keys.map((key, i) => [key, values[i]])),
+            content: keys.map((key, i) => {
+                return {
+                    enum: key,
+                    value: values[i]
+                }
+            }),
         }
     }
 
     // ast is always a div (the "jurAbsatz")
     const {children} = ast
-    console.log(ast)
+    if (ast.tagName === '#text')
+        return ast.text
     return children.map(child => {
         switch (child.tagName) {
             case '#text':

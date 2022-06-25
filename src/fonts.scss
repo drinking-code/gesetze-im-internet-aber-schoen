@@ -56,17 +56,16 @@
   font: {
     family: 'Playfair Display', serif;
     weight: 800;
-    size: 4.5rem;
+    size: 3.5rem;
   }
   line-height: 1;
 }
 
 @mixin sub-title {
+  @include title;
   font: {
-    family: 'Playfair Display', serif;
     weight: 400;
     style: italic;
-    size: 4.5rem;
   }
   line-height: 1;
 }
@@ -95,5 +94,12 @@
     family: 'Atkinson Hyperlegible', sans-serif;
     weight: 400;
     size: 1rem;
+  }
+}
+
+@mixin bold-text {
+  @include text;
+  font: {
+    weight: 700;
   }
 }
