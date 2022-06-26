@@ -1,0 +1,75 @@
+@use '../../fonts';
+@use '../../colors';
+
+@mixin lawText($tableOfContentsWidth, $paddingHorizontal) {
+  .headline {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+
+    > * {
+      margin-right: 1rem;
+    }
+
+    .supTitle {
+      margin-bottom: .5rem;
+      @include fonts.sup-heading;
+    }
+  }
+
+  .heading2 {
+    margin-top: 1.5rem;
+    @include fonts.heading-2;
+
+    .supTitle {
+      font-weight: 700;
+    }
+  }
+
+  .heading {
+    .supTitle {
+      display: block;
+    }
+    @include fonts.heading;
+  }
+
+  .paragraph {
+    max-width: 45rem;
+  }
+
+  table {
+    margin: .5rem 0;
+
+    width: calc(100vw - #{$tableOfContentsWidth} - #{$paddingHorizontal} * 2);
+    border-collapse: collapse;
+
+    &.autoWidth {
+      width: auto;
+    }
+
+    td, th {
+      padding: .3rem;
+    }
+
+    &.tableBorder {
+      td, th {
+        padding: .3rem 1rem;
+        border: 1px solid mix(colors.dark(text), colors.light(text), 50%);
+      }
+    }
+  }
+
+  dl {
+    margin: .5rem 0;
+    
+    display: grid;
+    grid: {
+      template: {
+        columns: auto 1fr;
+      };
+    };
+
+    dd {
+      margin-left: 1rem;
+    }
+  }
+}

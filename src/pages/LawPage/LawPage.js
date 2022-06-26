@@ -2,10 +2,12 @@ import {Fragment} from 'react'
 import {useParams} from 'react-router-dom'
 
 import Icon from '../../elements/Icon'
+import LawText from './LawText'
 
 import routes from '../../../scraper/data/routes.json'
 import styles from './law-page.module.scss'
 import {cl} from '../../utils/classNames'
+import {urlAnchor} from '../../utils/string-cases'
 
 const laws = require.context('../../../scraper/data/laws/')
 
@@ -13,13 +15,29 @@ export default function LawPage() {
     const {law} = useParams()
     const lawData = laws(routes[law])
 
-    lawData.state = lawData.state.map(text => [text, <br key={text}/>]).flat().slice(0, -1)
-    lawData.footnote = lawData.footnote.replace(/(<br>|\s)+$/, '')
+    lawData.state = lawData.state?.map(text => [text, <br key={text}/>]).flat().slice(0, -1)
+    lawData.footnote = lawData.footnote?.replace(/(<br>|\s)+$/, '')
+
+    const headingText = block => [block.supTitle, block.title || block.heading].join(' ')
 
     return (
         <Fragment>
             <aside className={styles.tableOfContents}>
+                <ul>
+                    {lawData.content.map((block, i) => {
+                        let label = headingText(block)
+                        const maxLength = 33
 
+                        if (label.length > maxLength)
+                            label = label.slice(0, maxLength - 1) + '…'
+
+                        return <li key={label}>
+                            <a href={`#${urlAnchor(headingText(block))}`}>
+                                {label}
+                            </a>
+                        </li>
+                    })}
+                </ul>
             </aside>
             <main className={styles.main}>
                 <h1 className={styles.title}>{lawData.title}</h1>
@@ -45,36 +63,7 @@ export default function LawPage() {
                         <pre dangerouslySetInnerHTML={{__html: lawData.footnote}}/>
                     </Fragment>}
                 </details>
-                {lawData.content.map(block => {
-                    const headline = <Fragment>
-                        {block.supTitle && <span className={styles.supTitle}>{block.supTitle}</span>}
-                        <span>{block.title || block.heading}</span>
-                    </Fragment>
-
-                    return [
-                        block.title && <h2 className={cl(styles.headline, styles.title)}>
-                            {headline}
-                        </h2>,
-                        block.heading && <h3 className={cl(styles.headline, styles.heading)}>
-                            {headline}
-                        </h3>,
-                        block.content?.map((paragraph, i) =>
-                            paragraph.filter(v => !!v).length === 0
-                                ? null
-                                : <p key={i}>
-                                    {paragraph.map((part, i) => {
-                                        console.log(part)
-                                        if (!part) return
-                                        switch (part.type) {
-                                            case 'text':
-                                                if (part.content === '') return
-                                                return <span key={i}>{part.content}</span>
-                                        }
-                                    })}
-                                </p>
-                        ),
-                    ]
-                })}
+                <LawText data={lawData} headingText={headingText}/>
             </main>
         </Fragment>
     )

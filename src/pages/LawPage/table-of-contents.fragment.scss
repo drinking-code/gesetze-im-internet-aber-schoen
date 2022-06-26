@@ -1,0 +1,60 @@
+@use '../../fonts';
+@use '../../colors';
+
+@mixin tableOfContents($tableOfContentsWidth) {
+  .tableOfContents {
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    height: 100vh;
+    width: $tableOfContentsWidth;
+
+    padding: 2rem 0;
+
+    border-right: 1px solid;
+    @include colors.color(border-color, text, .8);
+
+    overflow-y: auto;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0 2rem;
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      li {
+        margin-bottom: .5rem;
+        max-height: 3rem;
+
+        white-space: nowrap;
+
+        &.active {
+          position: relative;
+          &:after {
+            content: '';
+            position: absolute;
+
+            width: 100%;
+            height: .7rem;
+
+            top: .7rem;
+            left: -.5rem;
+
+            @include colors.color(background, marker);
+
+            z-index: -1;
+          }
+        }
+
+        a {
+          @include colors.color(color, text);
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}

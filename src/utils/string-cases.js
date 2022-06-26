@@ -13,3 +13,12 @@ export function camelCase(string) {
         return index === 0 ? match.toLowerCase() : match.toUpperCase();
     }).replace(/-/g, '');
 }
+
+export function urlAnchor(string) {
+    return string.toLowerCase().trim()
+        .replace(/\s+/g, '_')
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/[^a-z\d_-]/g, '')
+}

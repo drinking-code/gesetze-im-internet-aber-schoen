@@ -77,7 +77,10 @@
 
 @mixin sup-heading {
   @include sub-title;
-  font-size: 1.2rem;
+  font: {
+    size: 1.2rem;
+    //weight: 500;
+  }
 }
 
 

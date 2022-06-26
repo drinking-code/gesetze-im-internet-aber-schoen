@@ -1,19 +1,11 @@
 @use '../../fonts';
 @use '../../colors';
+@use './law-text.fragment' as lawText;
+@use './table-of-contents.fragment' as tableOfContents;
 
 $tableOfContentsWidth: 20rem;
 
-.tableOfContents {
-  position: fixed;
-  left: 0;
-  top: 0;
-
-  height: 100vh;
-  width: $tableOfContentsWidth;
-
-  border-right: 1px solid;
-  @include colors.color(border-color, text, .8);
-}
+@include tableOfContents.tableOfContents($tableOfContentsWidth);
 
 .main {
   position: fixed;
@@ -24,12 +16,14 @@ $tableOfContentsWidth: 20rem;
   height: 100vh;
 
   box-sizing: border-box;
-  padding: 5rem;
+  $paddingHorizontal: 8rem;
+  padding: 4rem $paddingHorizontal;
 
   overflow-y: auto;
+  scroll-behavior: smooth;
 
   .title {
-    margin: 0 0 3.5rem;
+    margin: 0 0 3rem;
   }
 
   .dateOfIssue {
@@ -73,29 +67,5 @@ $tableOfContentsWidth: 20rem;
     }
   }
 
-  .headline {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-
-    > * {
-      margin-right: 1rem;
-    }
-
-    .supTitle {
-      margin-bottom: .5rem;
-      @include fonts.sup-heading;
-    }
-  }
-
-  .heading {
-    margin-top: 1.5rem;
-    @include fonts.heading-2;
-  }
-
-  .title {
-    .supTitle {
-      display: block;
-    }
-    @include fonts.heading;
-  }
+  @include lawText.lawText($tableOfContentsWidth, $paddingHorizontal)
 }

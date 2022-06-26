@@ -18,7 +18,7 @@ function simplifiedAst(node) {
         simplifiedNode.html = node.outerHTML
     }
 
-    if ([undefined, 'DT'].includes(node.tagName))
+    if ([undefined, 'DT', 'NOTINDEXED'].includes(node.tagName))
         simplifiedNode.text = node.textContent
 
     return simplifiedNode
@@ -55,10 +55,16 @@ function astToSimpleJsonMarkup(ast) {
 
     // ast is always a div (the "jurAbsatz")
     const {children} = ast
+
+    if (ast.tagName === 'TABLE')
+        return [{type: 'table', content: ast.html}]
+
     if (ast.tagName === '#text')
         return ast.text
+
     return children.map(child => {
         switch (child.tagName) {
+            case 'NOTINDEXED':
             case '#text':
                 return makeStyledJsonMarkupText(child.text)
             case 'SPAN':
