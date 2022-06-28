@@ -41,8 +41,8 @@ function getSectionDataFromHtml(html) {
     }
 
     if (!headerOnly) {
-        const jnhtml = html.querySelector('.jnheader + div .jnhtml')
-        data.content = Array.from(jnhtml.querySelectorAll('.jurAbsatz, .jurAbsatz ~ table')).map(getStructuredText)
+        // const jnhtml = html.querySelector('.jnheader + div .jnhtml')
+        data.content = Array.from(html.querySelectorAll('.jnheader + div .jnhtml > div > *')).map(getStructuredText)
     }
     if (html.querySelector('.jnfussnote'))
         data.footnote = html.querySelector('.jnfussnote .jnhtml .jurAbsatz').textContent
@@ -137,7 +137,7 @@ async function scrapeLaws() {
 
         bar.tick();
 
-        if (a > 3) break
+        if (a > 4) break
     }
 
     fs.writeFileSync('./data/routes.json', JSON.stringify(routes))

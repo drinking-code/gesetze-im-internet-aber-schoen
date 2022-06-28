@@ -1,0 +1,64 @@
+@use 'sass:math';
+@use '../../fonts';
+@use '../../colors';
+
+@function strip-s($value) {
+  @return math.div($value, ($value * 0 + 1));
+}
+
+@mixin anchors {
+  .anchorIcon {
+    position: absolute;
+    top: -.25rem;
+    left: -2.5rem;
+
+    padding: .4rem;
+
+    $size: 1rem;
+    height: $size;
+    width: $size;
+
+    mask-clip: content-box;
+    mask-size: $size;
+
+    @include colors.color(color, text, .5);
+
+    cursor: pointer;
+  }
+
+  $animation-length: 3s;
+  $fade-in-length: .3s;
+  $fade-out-length: 1s;
+
+  .linkCopiedMessage {
+    position: absolute;
+    bottom: 1.6rem;
+    left: -5rem;
+
+    padding: .5rem .8rem;
+
+    @include fonts.text;
+    @include colors.color(background, text);
+    @include colors.color(color, background);
+
+    animation: linkCopiedMessageFadeInOut $animation-length ease both;
+  }
+
+  @keyframes linkCopiedMessageFadeInOut {
+    from {
+      opacity: 0;
+    }
+
+    #{math.div(strip-s($fade-in-length), strip-s($animation-length)) * 100%} {
+      opacity: 1;
+    }
+
+    #{100% - math.div(strip-s($fade-out-length), strip-s($animation-length)) * 100%} {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+}

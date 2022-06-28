@@ -31,6 +31,10 @@
     mask-image: url('./icons/i-circle.svg');
   }
 
+  &.link {
+    mask-image: url('./icons/link.svg');
+  }
+
   &.magnifyingGlass {
     mask-image: url('./icons/magnifying-glass.svg');
   }

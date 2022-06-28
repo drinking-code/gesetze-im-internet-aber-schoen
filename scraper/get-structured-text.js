@@ -13,7 +13,7 @@ function simplifiedAst(node) {
     if (simplifiedNode.children.length === 0)
         delete simplifiedNode.children
 
-    if (node.tagName === 'TABLE') {
+    if (['TABLE', 'PRE'].includes(node.tagName)) {
         delete simplifiedNode.children
         simplifiedNode.html = node.outerHTML
     }
@@ -73,6 +73,8 @@ function astToSimpleJsonMarkup(ast) {
                     italic: child.style.fontStyle === 'italic',
                     underline: child.style.textDecoration === 'underline',
                 })
+            case 'PRE':
+                return {type: 'pre', content: child.html}
             case 'DL':
                 return makeStyledJsonMarkupList(child)
             case 'BR':

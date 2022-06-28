@@ -1,14 +1,18 @@
 @use '../../fonts';
 @use '../../colors';
+@use './anchors.fragment' as anchors;
 
 @mixin lawText($tableOfContentsWidth, $paddingHorizontal) {
   .headline {
+    position: relative;
     margin-top: 2rem;
     margin-bottom: 1rem;
 
     > * {
       margin-right: 1rem;
     }
+
+    @include anchors.anchors;
 
     .supTitle {
       margin-bottom: .5rem;
@@ -29,7 +33,13 @@
     .supTitle {
       display: block;
     }
+
     @include fonts.heading;
+
+    .anchorIcon {
+      top: auto;
+      bottom: 0;
+    }
   }
 
   .paragraph {
@@ -60,7 +70,7 @@
 
   dl {
     margin: .5rem 0;
-    
+
     display: grid;
     grid: {
       template: {
@@ -71,5 +81,13 @@
     dd {
       margin-left: 1rem;
     }
+
+    dt:empty + dd {
+      margin-left: 0;
+    }
+  }
+
+  pre {
+    font-size: 0.9rem;
   }
 }

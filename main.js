@@ -13,7 +13,7 @@ const minifierOptions = require('./config/html-minifier-options')
 app.use(shrinkRay())
 
 app.use((req, res, next) => {
-    const allowedSuffixes = ['.css', '.map', '.ttf', '.woff2']
+    const allowedSuffixes = ['.css', '.map', 'script.js', '.ttf', '.woff2', '.png']
     const isAllowed = path =>
         allowedSuffixes.map(suffix => path.endsWith(suffix)).includes(true)
 
@@ -22,8 +22,12 @@ app.use((req, res, next) => {
     res.sendFile(path.join(__dirname, 'build', req.path))
 })
 
+const cache = new Map()
+
 app.use(async (req, res, next) => {
     if (req.method !== 'GET') return next()
+    if (process.env.NODE_ENV === 'production' && cache.has(req.url))
+        return res.send(cache.get(req.url))
 
     let htmlString
     try {
@@ -46,6 +50,7 @@ app.use(async (req, res, next) => {
         }
     }
     res.send(htmlString)
+    cache.set(req.url, htmlString)
 })
 
 app.listen(3001)

@@ -16,11 +16,7 @@ module.exports = {
         filename: 'index.js',
         path: path.resolve('build'),
         library: {
-            // note there's no `name` here
             type: 'commonjs2',
-        },
-        clean: {
-            keep: /loadable-stats\.json/,
         },
     },
     module: makeModule(),
