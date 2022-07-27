@@ -13,7 +13,7 @@ const minifierOptions = require('./config/html-minifier-options')
 app.use(shrinkRay())
 
 app.use((req, res, next) => {
-    const allowedSuffixes = ['.css', '.map', 'script.js', '.ttf', '.woff2', '.png']
+    const allowedSuffixes = ['.css', '.map', 'script.js', '.ttf', '.woff2', '.png', '.ico']
     const isAllowed = path =>
         allowedSuffixes.map(suffix => path.endsWith(suffix)).includes(true)
 
