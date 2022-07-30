@@ -1,4 +1,4 @@
-import {useLocation} from 'react-router-dom'
+import {Route, Routes, useLocation, useSearchParams} from 'react-router-dom'
 
 import './style.scss'
 import App from './App'
@@ -11,6 +11,7 @@ const laws = require.context('../scraper/data/laws/')
 
 export default function Document() {
     const location = useLocation()
+    const [searchParams] = useSearchParams()
     let lawData;
     try {
         lawData = laws(routes[location.pathname.replace(/\//g, '')])
@@ -20,9 +21,18 @@ export default function Document() {
         <html lang={'de'}>
         <head>
             <meta charSet="utf-8"/>
-            <title>{[!!lawData && lawData.abbr, 'Gesetze im Internet; aber schön'].join(' - ')}</title>
+            <title>{[
+                !!lawData && lawData.abbr,
+                location.pathname === '/suche' ? searchParams.get('q') : null,
+                'Gesetze im Internet; aber schön'
+            ].filter(v => !!v).join(' - ')}</title>
             <link rel={'stylesheet'} href={'/style.css'}/>
-            <script src={'/script.js'} defer/>
+            <Routes>
+                <Route path={'/suche'} exact/>
+                <Route path={'/:law'} exact element={
+                    <script src={'/script.js'} defer/>
+                }/>
+            </Routes>
         </head>
         <body>
         <App/>

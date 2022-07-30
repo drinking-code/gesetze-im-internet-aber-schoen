@@ -1,0 +1,58 @@
+@use '../../fonts';
+@use '../../colors';
+
+$header-height: 5rem;
+
+.header {
+  position: absolute;
+  width: 100vw;
+  height: $header-height;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include colors.color(background, background, .3);
+
+  backdrop-filter: blur(50px);
+  z-index: 1;
+
+  .searchBar {
+    margin: 0;
+  }
+}
+
+.resultsList {
+  $max-width: 50rem;
+
+  height: 100vh;
+
+  margin: 0;
+  padding: $header-height calc((100vw - #{$max-width}) / 2) 2rem;
+  box-sizing: border-box;
+
+  list-style: none;
+  overflow-y: auto;
+
+  .resultHeading {
+    margin-bottom: .5rem;
+
+    @include fonts.sup-heading;
+    font-size: 1.5rem;
+
+    .appendix {
+      @include fonts.text;
+      font-style: normal;
+
+      opacity: .5;
+
+      &:before {
+        content: ' — ';
+      }
+    }
+  }
+
+  .excerpt {
+    opacity: .7;
+  }
+}

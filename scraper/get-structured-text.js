@@ -13,13 +13,15 @@ function simplifiedAst(node) {
     if (simplifiedNode.children.length === 0)
         delete simplifiedNode.children
 
-    if (['TABLE', 'PRE'].includes(node.tagName)) {
+    const keepHtml = ['TABLE', 'PRE']
+    if (keepHtml.includes(node.tagName)) {
         delete simplifiedNode.children
         simplifiedNode.html = node.outerHTML
     }
 
-    if ([undefined, 'DT', 'NOTINDEXED'].includes(node.tagName))
+    if ([undefined, 'DT', 'NOTINDEXED', 'DL', ...keepHtml].includes(node.tagName)) {
         simplifiedNode.text = node.textContent
+    }
 
     return simplifiedNode
 }
@@ -50,6 +52,7 @@ function astToSimpleJsonMarkup(ast) {
                     value: values[i]
                 }
             }),
+            text: ast.text
         }
     }
 
@@ -57,7 +60,7 @@ function astToSimpleJsonMarkup(ast) {
     const {children} = ast
 
     if (ast.tagName === 'TABLE')
-        return [{type: 'table', content: ast.html}]
+        return [{type: 'table', content: ast.html, text: ast.text}]
 
     if (ast.tagName === '#text')
         return ast.text
@@ -74,13 +77,13 @@ function astToSimpleJsonMarkup(ast) {
                     underline: child.style.textDecoration === 'underline',
                 })
             case 'PRE':
-                return {type: 'pre', content: child.html}
+                return {type: 'pre', content: child.html, text: child.text}
             case 'DL':
                 return makeStyledJsonMarkupList(child)
             case 'BR':
                 return {type: 'break'}
             case 'TABLE':
-                return {type: 'table', content: child.html}
+                return {type: 'table', content: child.html, text: child.text}
         }
     })
 }
