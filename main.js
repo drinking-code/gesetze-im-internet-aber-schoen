@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 
 const app = require('express')()
 const helmet = require('helmet')
@@ -19,7 +20,11 @@ app.use((req, res, next) => {
 
     if (req.method !== 'GET' || !isAllowed(req.path)) return next()
 
-    res.sendFile(path.join(__dirname, 'build', req.path))
+    const filePath = path.join(__dirname, 'build', req.path)
+    if (!fs.existsSync(filePath))
+        return res.status(404).end()
+
+    res.sendFile(filePath)
 })
 
 const cache = new Map()

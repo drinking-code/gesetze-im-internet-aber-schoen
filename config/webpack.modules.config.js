@@ -29,8 +29,8 @@ const postcssAndSass = [{
                 'generate-class-name($class)': function (className) {
                     className = className.getValue()
                     const prefix = 'global_'
-                    if (!className.startsWith('global_'))
-                        className = 'global_' + className
+                    if (!className.startsWith(prefix))
+                        className = prefix + className
                     return new sass.SassString(generateClassName(className))
                 }
             },
@@ -38,7 +38,7 @@ const postcssAndSass = [{
     }
 },]
 
-const makeModule = () => {
+const makeModule = (noCss) => {
     return {
         rules: [{
             test: /\.js$/,
@@ -64,6 +64,9 @@ const makeModule = () => {
             exclude: /\.module\.s?[ac]ss$/i,
             use: [{
                 loader: MiniCssExtractPlugin.loader,
+                options: {
+                    emit: !noCss,
+                },
             }, {
                 loader: 'css-loader',
                 options: {
@@ -75,6 +78,9 @@ const makeModule = () => {
             test: /\.module\.s?[ac]ss$/i,
             use: [{
                 loader: MiniCssExtractPlugin.loader,
+                options: {
+                    emit: !noCss,
+                },
             }, {
                 loader: 'css-loader',
                 options: {

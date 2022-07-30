@@ -1,6 +1,7 @@
 const path = require('path')
 
 const TerserPlugin = require('terser-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const makeModule = require('./webpack.modules.config')
 
@@ -15,35 +16,36 @@ module.exports = {
         filename: 'script.js',
         path: path.resolve('build'),
     },
-    module: makeModule(),
+    module: makeModule(true),
     optimization: {
         moduleIds: 'deterministic',
         chunkIds: 'deterministic',
         minimize: isProduction,
         minimizer: [
+            new TerserPlugin({
+                extractComments: false,
+                terserOptions: {
+                    compress: {
+                        arguments: true,
+                        booleans_as_integers: true,
+                        drop_console: true,
+                        ecma: '2015',
+                        passes: 2,
+                        toplevel: true,
+                    },
+                    mangle: {
+                        toplevel: true,
+                    },
+                    format: {
+                        comments: false,
+                        ecma: '2015',
+                    },
+                    toplevel: true,
+                },
+            }),
         ],
     },
     plugins: [
-        new TerserPlugin({
-            extractComments: false,
-            terserOptions: {
-                compress: {
-                    arguments: true,
-                    // booleans_as_integers: true,
-                    // drop_console: true,
-                    ecma: '2015',
-                    passes: 2,
-                    toplevel: true,
-                },
-                mangle: {
-                    toplevel: true,
-                },
-                format: {
-                    comments: false,
-                    ecma: '2015',
-                },
-                toplevel: true,
-            },
-        }),
+        new MiniCssExtractPlugin()
     ],
 }

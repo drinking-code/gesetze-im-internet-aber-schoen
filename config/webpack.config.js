@@ -2,6 +2,7 @@ const path = require('path')
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 const makeModule = require('./webpack.modules.config')
 
@@ -18,6 +19,9 @@ module.exports = {
         library: {
             type: 'commonjs2',
         },
+        clean: {
+            keep: /script\.js$/
+        }
     },
     module: makeModule(),
     optimization: {
@@ -25,10 +29,17 @@ module.exports = {
         chunkIds: 'deterministic',
         minimize: isProduction,
         minimizer: [
+            new TerserPlugin(),
             new CssMinimizerPlugin({
                 minimizerOptions: [{
+                    level: {
+                        1: {
+                            roundingPrecision: 'all=3',
+                        },
+                    },
+                }, {
                     preset: [
-                        "advanced", {
+                        'advanced', {
                             discardUnused: true,
                             mergeIdents: true,
                             reduceIdents: true,
@@ -36,6 +47,7 @@ module.exports = {
                         }]
                 }, {},],
                 minify: [
+                    CssMinimizerPlugin.cleanCssMinify,
                     CssMinimizerPlugin.cssnanoMinify,
                     CssMinimizerPlugin.cssoMinify,
                 ],
