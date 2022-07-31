@@ -1,7 +1,23 @@
+@use 'sass:string';
 @use '../../fonts';
 @use '../../colors';
 
 $header-height: 5rem;
+
+@function make-text-shadow($background-color, $text-shadow-spread-x, $text-shadow-spread-y) {
+  $text-shadow: '';
+  @for $i from 1 through $text-shadow-spread-x {
+    @for $j from 1 through $text-shadow-spread-y {
+      $text-shadow: $text-shadow + '#{-$i}px #{-$j}px 0 #{$background-color}, ';
+      $text-shadow: $text-shadow + '#{-$i}px #{$j}px 0 #{$background-color}, ';
+      $text-shadow: $text-shadow + '#{$i}px #{-$j}px 0 #{$background-color}, ';
+      $text-shadow: $text-shadow + '#{$i}px #{$j}px 0 #{$background-color}, ';
+    }
+  }
+  $text-shadow: string.slice($text-shadow, 0, -3);
+
+  @return string.unquote($text-shadow);
+}
 
 .header {
   position: absolute;
@@ -34,8 +50,52 @@ $header-height: 5rem;
   list-style: none;
   overflow-y: auto;
 
+  a {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .result {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .resultHeading {
+    margin-top: 0;
     margin-bottom: .5rem;
+
+    $text-shadow-spread-x: 3;
+    $text-shadow-spread-y: 1;
+
+    $background-color: colors.light(background);
+    //$background-color: transparentize(red, .5);
+    text-shadow: make-text-shadow($background-color, $text-shadow-spread-x, $text-shadow-spread-y);
+
+    @media (prefers-color-scheme: dark) {
+      $background-color: colors.dark(background);
+      text-shadow: make-text-shadow($background-color, $text-shadow-spread-x, $text-shadow-spread-y);
+    }
+
+    .main {
+      position: relative;
+
+      &:before {
+        content: '';
+        position: absolute;
+        bottom: 1px;
+
+        width: 100%;
+        height: 2px;
+
+        @include colors.color(background, text);
+
+        z-index: -1;
+      }
+    }
 
     @include fonts.sup-heading;
     font-size: 1.5rem;
@@ -53,6 +113,26 @@ $header-height: 5rem;
   }
 
   .excerpt {
-    opacity: .7;
+    // fading at the sides of the text
+    $fade-width: 3rem;
+    $black-to-black: linear-gradient(black, black);
+    mask: {
+      image: linear-gradient(to right, transparent, black), $black-to-black, linear-gradient(to left, transparent, black);
+      size: $fade-width 100%, calc(100% - #{$fade-width} * 2) 100%, $fade-width 100%;
+      repeat: no-repeat;
+      position: left center, center center, right center;
+    }
+
+    &, * {
+      @include colors.color(color, text, .4)
+    }
+
+    &.sharpLeft {
+      mask-image: $black-to-black, $black-to-black, linear-gradient(to left, transparent, black);
+    }
+
+    &.sharpRight {
+      mask-image: linear-gradient(to right, transparent, black), $black-to-black, $black-to-black;
+    }
   }
 }

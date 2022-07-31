@@ -83,7 +83,9 @@ const index = lunr(function () {
             })
 
             textOnlyLaw.content.push({
-                heading: block.title ?? block.heading ?? block.supTitle,
+                title: block.title,
+                heading: block.heading,
+                supTitle: block.supTitle,
                 text,
             })
         })

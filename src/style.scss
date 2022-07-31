@@ -49,3 +49,23 @@ a {
     }
   }
 }
+
+mark {
+  position: relative;
+  background: none;
+
+  &:after {
+    content: '';
+    position: absolute;
+
+    width: calc(100% + .4rem);
+    height: .8rem;
+
+    top: .4rem;
+    left: -.2rem;
+
+    @include colors.color(background, marker);
+
+    z-index: -1;
+  }
+}

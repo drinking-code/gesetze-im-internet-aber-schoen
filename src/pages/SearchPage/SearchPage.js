@@ -1,11 +1,15 @@
 import {Fragment} from 'react'
 import {useSearchParams} from 'react-router-dom'
+
 import SearchBar from '../../elements/SearchBar'
 import index, {idMap, textOnlyLaws} from './lunr-index'
-
-const laws = require.context('../../../scraper/data/laws/')
+import markText from './mark-text'
+import truncateToMarked from './truncate-to-marked'
 
 import styles from './search-page.module.scss'
+import {cl} from '../../utils/classNames'
+
+const laws = require.context('../../../scraper/data/laws/')
 
 export default function SearchPage() {
     const [searchParams] = useSearchParams()
@@ -23,18 +27,27 @@ export default function SearchPage() {
                         const fieldName = Object.keys(metadata[term])[0]
                         return metadata[term][fieldName].position
                     })
-                    console.log(positions)
+                    // console.log(positions)
                     const law = textOnlyLaws[location.lawPath]
                     const paragraph = law.content[location.index]
+                    // console.log(location)
+                    const [text, markedPosition] = truncateToMarked(markText(paragraph?.text, positions))
                     return (
                         <li key={`${result.ref}_${i}`}>
-                            <article>
-                                <h2 className={styles.resultHeading}>
-                                    {paragraph.heading}
-                                    <span className={styles.appendix}>{law.abbr}</span>
-                                </h2>
-                                <span className={styles.excerpt}>{paragraph.text}</span>
-                            </article>
+                            <a href={`/${location.lawPath}`}> {/* todo: add anchor (or scroll down to excerpt) */}
+                                <article className={styles.result}>
+                                    <h2 className={styles.resultHeading}>
+                                    <span className={styles.main}>
+                                        {[paragraph?.supTitle, paragraph?.heading].join(' ').trim()}
+                                    </span>
+                                        <span className={styles.appendix}>{law.abbr}</span>
+                                    </h2>
+                                    <span className={cl(
+                                        styles.excerpt,
+                                        [styles.sharpLeft, null, styles.sharpRight][markedPosition + 1]
+                                    )}>{text}</span>
+                                </article>
+                            </a>
                         </li>
                     )
                 })}
