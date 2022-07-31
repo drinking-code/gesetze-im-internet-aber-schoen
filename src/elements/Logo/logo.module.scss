@@ -1,0 +1,48 @@
+@use '../../fonts';
+@use '../../colors';
+
+.logo {
+  &, &:visited {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  h1 {
+    margin: auto;
+    font: {
+      size: 2rem;
+      weight: normal;
+    }
+  }
+
+  cursor: pointer;
+
+  .bold {
+    position: relative;
+    font: {
+      weight: bold;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+
+      width: 100%;
+      height: 1.2rem;
+
+      top: 1.3rem;
+      left: -.4rem;
+
+      @include colors.color(background, marker);
+
+      z-index: -1;
+    }
+  }
+
+  .italic {
+    font: {
+      weight: normal;
+      style: italic;
+    }
+  }
+}

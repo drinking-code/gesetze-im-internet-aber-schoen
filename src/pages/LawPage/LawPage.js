@@ -8,6 +8,7 @@ import routes from '../../../scraper/data/routes.json'
 import styles from './law-page.module.scss'
 import {cl} from '../../utils/classNames'
 import {urlAnchor} from '../../utils/string-cases'
+import Logo from '../../elements/Logo'
 
 const laws = require.context('../../../scraper/data/laws/')
 
@@ -23,6 +24,7 @@ export default function LawPage() {
     return (
         <Fragment>
             <aside className={styles.tableOfContents}>
+                <Logo/>
                 <ul>
                     {lawData.content.map((block, i) => {
                         let label = headingText(block)

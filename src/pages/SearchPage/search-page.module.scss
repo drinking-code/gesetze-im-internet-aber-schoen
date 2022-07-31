@@ -33,6 +33,11 @@ $header-height: 5rem;
   backdrop-filter: blur(50px);
   z-index: 1;
 
+  .logo {
+    position: absolute;
+    left: 3rem;
+  }
+
   .searchBar {
     margin: 0;
   }

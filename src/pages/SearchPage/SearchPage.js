@@ -2,6 +2,7 @@ import {Fragment} from 'react'
 import {useSearchParams} from 'react-router-dom'
 
 import SearchBar from '../../elements/SearchBar'
+import Logo from '../../elements/Logo/Logo'
 import index, {idMap, textOnlyLaws} from './lunr-index'
 import markText from './mark-text'
 import truncateToMarked from './truncate-to-marked'
@@ -17,6 +18,7 @@ export default function SearchPage() {
     return (
         <Fragment>
             <header className={styles.header}>
+                <Logo className={styles.logo}/>
                 <SearchBar className={styles.searchBar} value={searchParams.get('q')}/>
             </header>
             <ol className={styles.resultsList}>

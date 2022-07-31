@@ -10,7 +10,7 @@
     height: 100vh;
     width: $tableOfContentsWidth;
 
-    padding: 2rem 0;
+    padding: 1rem 2rem;
     box-sizing: border-box;
 
     border-right: 1px solid;
@@ -21,7 +21,7 @@
     ul {
       list-style: none;
       margin: 0;
-      padding: 0 2rem;
+      padding: 2rem 0 1rem;
 
       display: flex;
       flex-direction: column;
