@@ -27,29 +27,51 @@ export default function SearchPage() {
                         const fieldName = Object.keys(metadata[term])[0]
                         return metadata[term][fieldName].position
                     })
-                    // console.log(positions)
                     const law = textOnlyLaws[location.lawPath]
                     const paragraph = law.content[location.index]
-                    // console.log(location)
-                    const [text, markedPosition] = truncateToMarked(markText(paragraph?.text, positions))
-                    return (
-                        <li key={`${result.ref}_${i}`}>
-                            <a href={`/${location.lawPath}`}> {/* todo: add anchor (or scroll down to excerpt) */}
-                                <article className={styles.result}>
-                                    <h2 className={styles.resultHeading}>
-                                    <span className={styles.main}>
-                                        {[paragraph?.supTitle, paragraph?.heading].join(' ').trim()}
-                                    </span>
-                                        <span className={styles.appendix}>{law.abbr}</span>
-                                    </h2>
-                                    <span className={cl(
-                                        styles.excerpt,
-                                        [styles.sharpLeft, null, styles.sharpRight][markedPosition + 1]
-                                    )}>{text}</span>
-                                </article>
-                            </a>
-                        </li>
-                    )
+                    const field = Object.keys(metadata).map(term => {
+                        return Object.keys(metadata[term])[0]
+                    })[0]
+                    if (location.type === 'law') {
+                        return (
+                            <li key={`${result.ref}_${i}`}>
+                                <a href={`/${location.lawPath}`}>
+                                    <article className={cl(styles.result, styles.law)}>
+                                        <h2 className={styles.resultHeading}>
+                                            <span className={styles.main}>{law.abbr}</span>
+                                        </h2>
+                                        {field === 'abbr'
+                                            ? <span className={styles.fullTitle}>{law.title}</span>
+                                            : <span className={styles.fullTitle}>
+                                                {markText(law[field], positions)}
+                                            </span>
+                                        }
+
+                                    </article>
+                                </a>
+                            </li>
+                        )
+                    } else {
+                        const [text, markedPosition] = truncateToMarked(markText(paragraph?.text, positions))
+                        return (
+                            <li key={`${result.ref}_${i}`}>
+                                <a href={`/${location.lawPath}`}> {/* todo: add anchor (or scroll down to excerpt) */}
+                                    <article className={styles.result}>
+                                        <h2 className={styles.resultHeading}>
+                                            <span className={styles.main}>
+                                                {[paragraph?.supTitle, paragraph?.heading].join(' ').trim()}
+                                            </span>
+                                            <span className={styles.appendix}>{law.abbr}</span>
+                                        </h2>
+                                        <span className={cl(
+                                            styles.excerpt,
+                                            [styles.sharpLeft, null, styles.sharpRight][markedPosition + 1]
+                                        )}>{text}</span>
+                                    </article>
+                                </a>
+                            </li>
+                        )
+                    }
                 })}
             </ol>
         </Fragment>

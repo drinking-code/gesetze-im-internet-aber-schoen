@@ -1,3 +1,4 @@
+import {Fragment} from 'react'
 import {Route, Routes, useLocation, useSearchParams} from 'react-router-dom'
 
 import './style.scss'
@@ -28,7 +29,7 @@ export default function Document() {
             ].filter(v => !!v).join(' - ')}</title>
             <link rel={'stylesheet'} href={'/style.css'}/>
             <Routes>
-                <Route path={'/suche'} exact/>
+                <Route path={'/suche'} exact element={<Fragment/>}/>
                 <Route path={'/:law'} exact element={
                     <script src={'/script.js'} defer/>
                 }/>

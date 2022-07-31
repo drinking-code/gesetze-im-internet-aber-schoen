@@ -43,7 +43,7 @@ $header-height: 5rem;
 
   height: 100vh;
 
-  margin: 0;
+  margin: 1rem 0 0;
   padding: $header-height calc((100vw - #{$max-width}) / 2) 2rem;
   box-sizing: border-box;
 
@@ -62,6 +62,25 @@ $header-height: 5rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+
+    &.law {
+      display: initial;
+
+      .resultHeading {
+        display: inline;
+        margin-right: .2rem;
+
+        @include fonts.heading;
+        font: {
+          size: 1.5rem;
+          style: normal;
+        }
+      }
+
+      .fullTitle:before {
+        content: ' — ';
+      }
+    }
   }
 
   .resultHeading {
@@ -112,6 +131,12 @@ $header-height: 5rem;
     }
   }
 
+  .excerpt, .fullTitle {
+    &, * {
+      @include colors.color(color, text, .4)
+    }
+  }
+
   .excerpt {
     // fading at the sides of the text
     $fade-width: 3rem;
@@ -121,10 +146,6 @@ $header-height: 5rem;
       size: $fade-width 100%, calc(100% - #{$fade-width} * 2) 100%, $fade-width 100%;
       repeat: no-repeat;
       position: left center, center center, right center;
-    }
-
-    &, * {
-      @include colors.color(color, text, .4)
     }
 
     &.sharpLeft {

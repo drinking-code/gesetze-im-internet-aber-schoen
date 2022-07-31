@@ -31,7 +31,8 @@ function createId(data) {
 const index = lunr(function () {
     this.use(lunr.de)
     this.ref('id')
-    this.field('title')
+    this.field('abbr', {boost: 100})
+    this.field('title', {boost: 50})
     this.field('fullTitle')
     this.field('text')
 
@@ -46,6 +47,7 @@ const index = lunr(function () {
                 type: 'law',
                 lawPath,
             }),
+            abbr: law.abbr,
             title: law.title,
             fullTitle: law.fullTitle,
         })
