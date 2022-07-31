@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const {performance} = require('perf_hooks')
 
 const app = require('express')()
 const helmet = require('helmet')
@@ -29,7 +30,10 @@ app.use((req, res, next) => {
 
 const cache = new Map()
 
+let stats = []
+
 app.use(async (req, res, next) => {
+    const startTime = performance.now()
     if (req.method !== 'GET') return next()
     if (process.env.NODE_ENV === 'production' && cache.has(req.url))
         return res.send(cache.get(req.url))
@@ -56,6 +60,24 @@ app.use(async (req, res, next) => {
     }
     res.send(htmlString)
     cache.set(req.url, htmlString)
+    const endTime = performance.now()
+    stats.push({
+        startTime, endTime,
+        url: req.url
+    })
 })
+
+const second = 1000
+const minute = second * 60
+const hour = minute * 60
+const day = hour * 24
+
+setInterval(() => {
+    const statsCopy = [...stats]
+    stats = []
+    const datetime = new Date();
+    const filename = path.join(__dirname, 'logs', datetime.toISOString().slice(0,10) + '.json')
+    fs.writeFileSync(filename, JSON.stringify(statsCopy), {encoding: 'utf8'})
+}, day)
 
 app.listen(3001)

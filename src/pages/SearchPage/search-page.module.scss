@@ -55,6 +55,17 @@ $header-height: 5rem;
   list-style: none;
   overflow-y: auto;
 
+  &:empty {
+    &:after {
+      content: 'Keine Einträge gefunden.';
+      display: block;
+      text-align: center;
+
+      font-style: italic;
+      @include colors.color(color, text, .5);
+    }
+  }
+
   a {
     text-decoration: inherit;
     color: inherit;
@@ -69,7 +80,7 @@ $header-height: 5rem;
     align-items: flex-start;
 
     &.law {
-      display: initial;
+      display: block;
 
       .resultHeading {
         display: inline;
