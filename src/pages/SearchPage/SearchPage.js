@@ -57,7 +57,7 @@ export default function SearchPage() {
                         const [text, markedPosition] = truncateToMarked(markText(paragraph?.text, positions))
                         return (
                             <li key={`${result.ref}_${i}`}>
-                                <a href={`/${location.lawPath}`}> {/* todo: add anchor (or scroll down to excerpt) */}
+                                <a href={`/${location.lawPath}#${location.anchor}`}>
                                     <article className={styles.result}>
                                         <h2 className={styles.resultHeading}>
                                             <span className={styles.main}>

@@ -52,6 +52,16 @@
           }
         }
 
+        &.topLevel {
+          text-decoration-line: underline;
+          text-decoration-style: dashed;
+          text-decoration-thickness: 1.5px;
+
+          & ~ li:not(.topLevel) {
+            margin-left: 1rem;
+          }
+        }
+
         a {
           @include colors.color(color, text);
           text-decoration: none;

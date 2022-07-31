@@ -33,7 +33,7 @@ export default function LawPage() {
                         if (label.length > maxLength)
                             label = label.slice(0, maxLength - 1) + '…'
 
-                        return <li key={label}>
+                        return <li key={label} className={cl(block.title && styles.topLevel)}>
                             <a href={`#${urlAnchor(headingText(block))}`}>
                                 {label}
                             </a>
