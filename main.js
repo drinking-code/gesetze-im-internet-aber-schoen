@@ -28,6 +28,14 @@ app.use((req, res, next) => {
     res.sendFile(filePath)
 })
 
+app.get('/robots.txt', (req, res) => {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+    res.send(`\
+User-agent: *
+Allow: /
+`)
+})
+
 const cache = new Map()
 
 let stats = []
@@ -42,7 +50,8 @@ app.use(async (req, res, next) => {
     try {
         const html = require('./build/index.js')?.default(req.url)
 
-        htmlString = await minify(html, minifierOptions)
+        htmlString = '<!DOCTYPE html>'
+        htmlString += await minify(html, minifierOptions)
         htmlString += "<!--\n\n/\\\n |\\~~|\n | \\ |\n |___|\n\n-->"
     } catch (err) {
         const renderedError = pe.render(err);
@@ -76,7 +85,7 @@ setInterval(() => {
     const statsCopy = [...stats]
     stats = []
     const datetime = new Date();
-    const filename = path.join(__dirname, 'logs', datetime.toISOString().slice(0,10) + '.json')
+    const filename = path.join(__dirname, 'logs', datetime.toISOString().slice(0, 10) + '.json')
     fs.writeFileSync(filename, JSON.stringify(statsCopy), {encoding: 'utf8'})
 }, day)
 

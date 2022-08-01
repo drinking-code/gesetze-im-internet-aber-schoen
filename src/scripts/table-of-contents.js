@@ -19,23 +19,6 @@ class Section {
     get bottom() {
         return this.lastElement.getBoundingClientRect().bottom
     }
-
-    get verticalCenter() {
-        const top = this.top
-        // return (this.bottom - top) / 2 + top
-        return (this.bottom + top) / 2
-    }
-
-    get visibleArea() {
-        const clip = n => Math.min(Math.max(n, 0), window.innerHeight)
-        const top = clip(this.top)
-        const bottom = clip(this.bottom)
-        return bottom - top
-    }
-
-    get isFullyInFrame() {
-        return this.top > 0 && this.bottom < window.innerHeight
-    }
 }
 
 let sections = []

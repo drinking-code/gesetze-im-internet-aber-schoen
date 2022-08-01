@@ -37,6 +37,10 @@
     .toggle {
       box-sizing: content-box;
       padding: 2px;
+
+      @media (min-width: 1080px) {
+        display: none;
+      }
     }
 
     ul {

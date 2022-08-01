@@ -97,6 +97,9 @@ const makeModule = (noCss) => {
             test: /\.svg$/i,
             type: 'asset/inline',
         }, {
+            test: /\.png$/i,
+            type: 'asset/resource',
+        }, {
             test: /\.(ttf|woff2?)$/i,
             type: 'asset/resource',
         }],
