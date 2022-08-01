@@ -12,6 +12,14 @@
     top: -.25rem;
     left: -2.5rem;
 
+    @media (max-width: 1080px) {
+      left: -2rem;
+    }
+
+    @media (max-width: 440px) {
+      left: -1.75rem;
+    }
+
     padding: .4rem;
 
     $size: 1rem;
@@ -34,6 +42,14 @@
     position: absolute;
     bottom: 1.6rem;
     left: -5rem;
+
+    @media (max-width: 1080px) {
+      left: -2rem;
+    }
+
+    @media (max-width: 440px) {
+      left: -1.75rem;
+    }
 
     padding: .5rem .8rem;
 

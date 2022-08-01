@@ -2,7 +2,7 @@
 @use '../../colors';
 @use './anchors.fragment' as anchors;
 
-@mixin lawText($tableOfContentsWidth, $paddingHorizontal) {
+@mixin lawText($table-of-contents-width, $padding-horizontal, $padding-horizontal-mobile) {
   .headline {
     position: relative;
     margin-top: 2rem;
@@ -49,7 +49,10 @@
   table {
     margin: .5rem 0;
 
-    width: calc(100vw - #{$tableOfContentsWidth} - #{$paddingHorizontal} * 2);
+    width: calc(100vw - #{$table-of-contents-width} - #{$padding-horizontal} * 2);
+    @media (max-width: 1080px) {
+      width: calc(100vw - #{$padding-horizontal-mobile} * 2);
+    }
     border-collapse: collapse;
 
     &.autoWidth {

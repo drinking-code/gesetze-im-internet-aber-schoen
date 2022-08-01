@@ -1,47 +1,7 @@
-@use 'sass:string';
 @use '../../fonts';
 @use '../../colors';
-
-$header-height: 5rem;
-
-@function make-text-shadow($background-color, $text-shadow-spread-x, $text-shadow-spread-y) {
-  $text-shadow: '';
-  @for $i from 1 through $text-shadow-spread-x {
-    @for $j from 1 through $text-shadow-spread-y {
-      $text-shadow: $text-shadow + '#{-$i}px #{-$j}px 0 #{$background-color}, ';
-      $text-shadow: $text-shadow + '#{-$i}px #{$j}px 0 #{$background-color}, ';
-      $text-shadow: $text-shadow + '#{$i}px #{-$j}px 0 #{$background-color}, ';
-      $text-shadow: $text-shadow + '#{$i}px #{$j}px 0 #{$background-color}, ';
-    }
-  }
-  $text-shadow: string.slice($text-shadow, 0, -3);
-
-  @return string.unquote($text-shadow);
-}
-
-.header {
-  position: absolute;
-  width: 100vw;
-  height: $header-height;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @include colors.color(background, background, .3);
-
-  backdrop-filter: blur(50px);
-  z-index: 1;
-
-  .logo {
-    position: absolute;
-    left: 3rem;
-  }
-
-  .searchBar {
-    margin: 0;
-  }
-}
+@use './header.fragment' as header;
+@use './text-shadow.fragment' as text-shadow;
 
 .resultsList {
   $max-width: 50rem;
@@ -49,8 +9,16 @@ $header-height: 5rem;
   height: 100vh;
 
   margin: 1rem 0 0;
-  padding: $header-height calc((100vw - #{$max-width}) / 2) 2rem;
+  padding: header.$height max(3rem, calc((100vw - #{$max-width}) / 2)) 2rem;
   box-sizing: border-box;
+
+  @media (max-width: 760px) {
+    padding-top: header.$height-mobile;
+  }
+  @media (max-width: 500px) {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
 
   list-style: none;
   overflow-y: auto;
@@ -107,12 +75,11 @@ $header-height: 5rem;
     $text-shadow-spread-y: 1;
 
     $background-color: colors.light(background);
-    //$background-color: transparentize(red, .5);
-    text-shadow: make-text-shadow($background-color, $text-shadow-spread-x, $text-shadow-spread-y);
+    text-shadow: text-shadow.make-text-shadow($background-color, $text-shadow-spread-x, $text-shadow-spread-y);
 
     @media (prefers-color-scheme: dark) {
       $background-color: colors.dark(background);
-      text-shadow: make-text-shadow($background-color, $text-shadow-spread-x, $text-shadow-spread-y);
+      text-shadow: text-shadow.make-text-shadow($background-color, $text-shadow-spread-x, $text-shadow-spread-y);
     }
 
     .main {

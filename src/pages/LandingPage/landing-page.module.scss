@@ -16,6 +16,13 @@
 
     font-size: 4.5rem;
 
+    @media (max-width: 800px) {
+      font-size: 3rem;
+    }
+    @media (max-width: 520px) {
+      font-size: 2rem;
+    }
+
     &:before {
       content: '';
       position: absolute;
@@ -29,7 +36,7 @@
       z-index: -1;
     }
 
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
 
@@ -51,12 +58,22 @@
   align-items: center;
   justify-content: space-evenly;
 
+  @media (max-width: 800px) {
+    height: 10rem;
+    justify-content: center;
+    flex-direction: column;
+  }
+
   a {
     color: currentColor;
     text-decoration: none;
 
     display: flex;
     align-items: center;
+
+    @media (max-width: 800px) {
+      line-height: 2;
+    }
 
     .icon {
       margin-right: .5rem;

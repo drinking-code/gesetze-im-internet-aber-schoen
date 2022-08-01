@@ -1,14 +1,14 @@
 @use '../../fonts';
 @use '../../colors';
 
-@mixin tableOfContents($tableOfContentsWidth) {
+@mixin tableOfContents($table-of-contents-width) {
   .tableOfContents {
     position: fixed;
-    left: 0;
+    left: -$table-of-contents-width;
     top: 0;
 
     height: 100vh;
-    width: $tableOfContentsWidth;
+    width: $table-of-contents-width;
 
     padding: 1rem 2rem;
     box-sizing: border-box;

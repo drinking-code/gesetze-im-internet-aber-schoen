@@ -1,0 +1,16 @@
+@use 'sass:string';
+
+@function make-text-shadow($background-color, $text-shadow-spread-x, $text-shadow-spread-y) {
+  $text-shadow: '';
+  @for $i from 1 through $text-shadow-spread-x {
+    @for $j from 1 through $text-shadow-spread-y {
+      $text-shadow: $text-shadow + '#{-$i}px #{-$j}px 0 #{$background-color}, ';
+      $text-shadow: $text-shadow + '#{-$i}px #{$j}px 0 #{$background-color}, ';
+      $text-shadow: $text-shadow + '#{$i}px #{-$j}px 0 #{$background-color}, ';
+      $text-shadow: $text-shadow + '#{$i}px #{$j}px 0 #{$background-color}, ';
+    }
+  }
+  $text-shadow: string.slice($text-shadow, 0, -3);
+
+  @return string.unquote($text-shadow);
+}

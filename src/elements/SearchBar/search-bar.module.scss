@@ -21,7 +21,7 @@
   }
 
   input {
-    width: 20rem;
+    width: min(20rem, calc(100vw - 2.5rem * 2 - 4rem));
     $vertical-label-offset: .03rem;
     padding: calc(.5rem + #{$vertical-label-offset}) .7rem calc(.5rem - #{$vertical-label-offset});
 

@@ -1,0 +1,44 @@
+@use '../../fonts';
+@use '../../colors';
+
+$height: 5rem;
+$height-mobile: 8rem;
+
+.header {
+  position: absolute;
+  width: 100vw;
+  height: $height;
+
+  box-sizing: border-box;
+  padding: 0 3rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 1080px) {
+    justify-content: space-between;
+  }
+
+  @media (max-width: 760px) {
+    height: $height-mobile;
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
+
+  @include colors.color(background, background, .3);
+
+  backdrop-filter: blur(50px);
+  z-index: 1;
+
+  @media (min-width: 1080px) {
+    .logo {
+      position: absolute;
+      left: 3rem;
+    }
+  }
+
+  .searchBar {
+    margin: 0;
+  }
+}

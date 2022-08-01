@@ -4,6 +4,9 @@
 
 html, body {
   overflow: hidden;
+  @media (max-width: 350px) {
+    font-size: 14px;
+  }
 }
 
 body {
