@@ -4,7 +4,7 @@
 @mixin tableOfContents($table-of-contents-width) {
   .tableOfContents {
     position: fixed;
-    left: -$table-of-contents-width;
+    left: 0;
     top: 0;
 
     height: 100vh;
@@ -18,6 +18,27 @@
 
     overflow-y: auto;
 
+    @media (max-width: 1080px) {
+      width: 100vw;
+      height: 4rem;
+
+      @include colors.color(background, background, .3);
+      backdrop-filter: blur(50px);
+      border: none;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      z-index: 1;
+      overflow: visible;
+    }
+
+    .toggle {
+      box-sizing: content-box;
+      padding: 2px;
+    }
+
     ul {
       list-style: none;
       margin: 0;
@@ -26,6 +47,29 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+
+      @media (max-width: 1080px) {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translateX(calc($table-of-contents-width + 2rem * 2));
+
+        &.active {
+          transform: translateX(0);
+        }
+
+        height: calc(100vh - 2rem * 2);
+        padding: 2rem;
+
+        border-left: 1px solid;
+        @include colors.color(border-color, text, .8);
+        @include colors.color(background, background);
+
+        transition: transform .5s ease;
+
+        overflow-y: auto;
+        z-index: 1;
+      }
 
       li {
         margin-bottom: .5rem;

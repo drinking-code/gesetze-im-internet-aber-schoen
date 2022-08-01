@@ -20,16 +20,17 @@ $table-of-contents-width: 20rem;
   height: 100vh;
 
   box-sizing: border-box;
+
   $padding-horizontal: 8rem;
   $padding-horizontal-tablet: 3rem;
   $padding-horizontal-mobile: 2rem;
   padding: 4rem $padding-horizontal;
   @media (max-width: 1080px) {
-    padding: 3rem $padding-horizontal-tablet;
+    padding: 5rem $padding-horizontal-tablet;
   }
 
   @media (max-width: 440px) {
-    padding: 3rem $padding-horizontal-mobile;
+    padding: 5rem $padding-horizontal-mobile;
   }
 
   overflow-y: auto;

@@ -25,6 +25,7 @@ export default function LawPage() {
         <Fragment>
             <aside className={styles.tableOfContents}>
                 <Logo/>
+                <Icon icon={'list'} className={styles.toggle}/>
                 <ul>
                     {lawData.content.map((block, i) => {
                         let label = headingText(block)

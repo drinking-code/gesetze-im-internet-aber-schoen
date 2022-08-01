@@ -75,6 +75,10 @@
       line-height: 2;
     }
 
+    &:after {
+      top: -.2rem;
+    }
+
     .icon {
       margin-right: .5rem;
       margin-bottom: .1rem;
