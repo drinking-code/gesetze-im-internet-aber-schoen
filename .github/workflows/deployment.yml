@@ -25,4 +25,4 @@ jobs:
       - name: Build on server
         run: |
           ssh -i $HOME/.ssh/key ${{ secrets.DEV_USERNAME }}@95.179.153.38 \
-          "npm i && npm run build"
+          "cd ${{ secrets.DEV_DESTINATION }} && npm i && npm run build"
