@@ -3,7 +3,8 @@ import SearchBar from '../../elements/SearchBar'
 
 import styles from './not-found-page.module.scss'
 
-export default function NotFoundPage() {
+export default function NotFoundPage({status}) {
+    status._404 = true
     return (
         <main className={styles.page}>
             <h1>Nicht gefunden</h1>

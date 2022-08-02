@@ -65,6 +65,9 @@ function astToSimpleJsonMarkup(ast) {
     if (ast.tagName === '#text')
         return ast.text
 
+    if (ast.tagName === 'BR')
+        return [{type: 'break'}]
+
     return children.map(child => {
         switch (child.tagName) {
             case 'NOTINDEXED':

@@ -37,8 +37,6 @@ export default function Document({status}) {
     const description = lawData?.content[0].content[0][0].content
     const url = 'https://gesetze-im-internet-aber-schoen.info' + location.pathname
 
-    status._404 = notFound
-
     return (
         <html lang={'de'}>
         <head>
@@ -71,7 +69,7 @@ export default function Document({status}) {
             <meta property={'og:url'} content={url}/>
         </head>
         <body>
-        <App notFound={notFound}/>
+        <App notFound={notFound} status={status}/>
         {!notFound &&
             <Fragment>
                 <template id={'anchor_icon'}>

@@ -88,6 +88,10 @@ async function scrapeLaws() {
     let a = 0
     for (const lawUrl of lawUrls) {
         a++
+        /*if (a < 12) {
+            bar.tick()
+            continue
+        }*/
         const dom = await JSDOM.fromURL(lawUrl, {
             resources: resourceLoader,
         })
@@ -136,8 +140,6 @@ async function scrapeLaws() {
         fs.writeFileSync(filePath, JSON.stringify(data))
 
         bar.tick();
-
-        // if (a > 4) break
     }
 
     fs.writeFileSync('./data/routes.json', JSON.stringify(routes))

@@ -4,14 +4,14 @@ import LawPage from './pages/LawPage'
 import SearchPage from './pages/SearchPage'
 import NotFoundPage from './pages/NotFoundPage'
 
-export default function App({notFound}) {
+export default function App({notFound, status}) {
     return (
         <Routes>
             <Route path={'/'} exact element={<LandingPage/>}/>
             <Route path={'/suche'} exact element={<SearchPage/>}/>
             <Route path={'/:law'} exact element={
                 notFound
-                    ? <NotFoundPage/>
+                    ? <NotFoundPage status={status}/>
                     : <LawPage/>
             }/>
         </Routes>
