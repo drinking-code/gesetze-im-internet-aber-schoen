@@ -88,7 +88,7 @@ async function scrapeLaws() {
     let a = 0
     for (const lawUrl of lawUrls) {
         a++
-        /*if (a < 12) {
+        /*if (a < 31) {
             bar.tick()
             continue
         }*/

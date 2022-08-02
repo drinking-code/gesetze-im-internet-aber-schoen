@@ -68,7 +68,7 @@ function astToSimpleJsonMarkup(ast) {
     if (ast.tagName === 'BR')
         return [{type: 'break'}]
 
-    return children.map(child => {
+    return children?.map(child => {
         switch (child.tagName) {
             case 'NOTINDEXED':
             case '#text':
@@ -88,7 +88,7 @@ function astToSimpleJsonMarkup(ast) {
             case 'TABLE':
                 return {type: 'table', content: child.html, text: child.text}
         }
-    })
+    }) ?? []
 }
 
 module.exports = getStructuredText
