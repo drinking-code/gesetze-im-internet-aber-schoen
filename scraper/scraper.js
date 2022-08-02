@@ -94,7 +94,7 @@ async function scrapeLaws() {
     let a = 0
     for (const lawUrl of lawUrls) {
         a++
-        /*if (a < 44) {
+        /*if (a < 976) {
             bar.tick()
             continue
         }*/
@@ -138,7 +138,8 @@ async function scrapeLaws() {
             data.content.push(getSectionDataFromHtml(norm))
         )
 
-        const filePathStem = data.abbr.toLowerCase().replace(/[^a-z\d]/g, '')
+        const filePathStem = data.abbr?.toLowerCase().replace(/[^a-z\d]/g, '')
+            ?? data.original.replace(host, '').replace(/\//g, '')
         const filePath = `./data/laws/${filePathStem}.json`
 
         routes[data.original.replace(host, '').replace(/\//g, '')] = `./${filePathStem}.json`

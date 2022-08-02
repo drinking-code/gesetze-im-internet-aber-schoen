@@ -90,12 +90,17 @@ const hour = minute * 60
 const day = hour * 24
 
 setInterval(() => {
-    const statsCopy = [...stats]
+    let statsCopy = [...stats]
     stats = []
+
     const datetime = new Date();
     const filename = path.join(__dirname, 'logs', datetime.toISOString().slice(0, 10) + '.json')
+    if (fs.existsSync(filename)){
+        const existingStats = JSON.parse(fs.readFileSync(filename, {encoding: 'utf8'}))
+        statsCopy = existingStats.concat(statsCopy)
+    }
     fs.writeFileSync(filename, JSON.stringify(statsCopy), {encoding: 'utf8'})
-}, day)
+}, minute * 10)
 
 const port = process.env.DEPLOY_ENV === 'nginx' ? process.env.PORT : 3001
 app.listen(port)
