@@ -79,7 +79,7 @@ async function scrapeLaws() {
         lawUrls = lawUrls.concat(
             Array.from(lawUrlElements).map(element => element.href)
         )
-        break
+        // break
     }
 
     console.info('Scraping all laws from list...')
