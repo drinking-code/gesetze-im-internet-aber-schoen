@@ -14,7 +14,11 @@ const laws = require.context('../../../scraper/data/laws/')
 
 export default function LawPage() {
     const {law} = useParams()
-    const lawData = laws(routes[law])
+    let lawData
+    try {
+        lawData = laws(routes[law])
+    } catch (e) {
+    }
 
     lawData.state = lawData.state?.map(text => [text, <br key={text}/>]).flat().slice(0, -1)
     lawData.footnote = lawData.footnote?.replace(/(<br>|\s)+$/, '')

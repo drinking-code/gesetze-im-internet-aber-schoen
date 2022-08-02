@@ -1,0 +1,22 @@
+.page {
+  height: 80vh;
+  width: 100vw;
+
+  box-sizing: border-box;
+  padding: 0 3rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  h1 {
+    margin: 1.5rem 0;
+  }
+
+  p {
+    margin-bottom: 2rem;
+  }
+}

@@ -24,7 +24,7 @@ class Section {
 let sections = []
 const tableOfContents = document.querySelector('aside ul')
 
-tableOfContents.querySelectorAll('li a').forEach(link => {
+tableOfContents?.querySelectorAll('li a').forEach(link => {
     const section = new Section(link.href.replace(/^[^#]+?#/, ''))
     sections.push(section)
 })
@@ -53,5 +53,5 @@ function updateHighlight() {
 
 updateHighlight()
 
-mainElement.addEventListener('scroll', updateHighlight, {passive: true})
-mainElement.addEventListener('resize', updateHighlight, {passive: true})
+mainElement?.addEventListener('scroll', updateHighlight, {passive: true})
+mainElement?.addEventListener('resize', updateHighlight, {passive: true})

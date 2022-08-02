@@ -2,8 +2,8 @@ if (location.pathname !== '/') {
     const linkCopiedMsg = document.querySelector('#link_copied_msg').content
     const linkIcon = document.querySelector('#anchor_icon').content
     const headings = document.querySelectorAll('h2, h3')
-    headings.forEach(heading => {
-        const icon = linkIcon.cloneNode(true).childNodes[0]
+    headings?.forEach(heading => {
+        const icon = linkIcon?.cloneNode(true).childNodes[0]
         icon.addEventListener('click', () => {
             const url = new URL(location.href)
             url.hash = `#${heading.id}`

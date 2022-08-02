@@ -47,8 +47,11 @@ app.use(async (req, res, next) => {
         return res.send(cache.get(req.url))
 
     let htmlString
+    const status = {
+        _404: false
+    }
     try {
-        const html = require('./build/index.js')?.default(req.url)
+        const html = require('./build/index.js')?.default(req.url, status)
 
         htmlString = '<!DOCTYPE html>'
         htmlString += await minify(html, minifierOptions)
@@ -67,6 +70,8 @@ app.use(async (req, res, next) => {
             }
         }
     }
+    if (status._404)
+        res.status(404)
     res.send(htmlString)
     cache.set(req.url, htmlString)
     const endTime = performance.now()

@@ -2,8 +2,8 @@ import styles from '../pages/LawPage/law-page.module.scss'
 
 const tocToggle = document.querySelector(`.${styles.toggle}`)
 const toc = document.querySelector(`.${styles.tableOfContents} ul`)
-tocToggle.addEventListener('click', toggleToc)
-toc.querySelectorAll('a').forEach(a =>
+tocToggle?.addEventListener('click', toggleToc)
+toc?.querySelectorAll('a').forEach(a =>
     a.addEventListener('click', closeToc)
 )
 window.addEventListener('touchstart', closeTocIfOutside)
@@ -16,9 +16,9 @@ function closeTocIfOutside(e) {
 }
 
 function closeToc() {
-    toc.classList.remove(styles.active)
+    toc?.classList.remove(styles.active)
 }
 
 function toggleToc() {
-    toc.classList.toggle(styles.active)
+    toc?.classList.toggle(styles.active)
 }

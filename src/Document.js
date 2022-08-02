@@ -17,21 +17,28 @@ import favicon512 from './assets/images/favicon-512.png'
 import favicon1024 from './assets/images/favicon-1024.png'
 import favicon2048 from './assets/images/favicon-2048.png'
 
-export default function Document() {
+export default function Document({status}) {
     const location = useLocation()
     const [searchParams] = useSearchParams()
+    let notFound = false
     let lawData;
     try {
         lawData = laws(routes[location.pathname.replace(/\//g, '')])
     } catch (e) {
+        notFound = true
     }
+
     const title = [
         !!lawData && lawData.abbr,
-        location.pathname === '/suche' ? searchParams.get('q') : null,
+        location.pathname === '/suche' && searchParams.get('q'),
+        notFound && 'Nicht gefunden',
         'Gesetze im Internet; aber schön'
     ].filter(v => !!v).join(' - ')
     const description = lawData?.content[0].content[0][0].content
     const url = 'https://gesetze-im-internet-aber-schoen.info' + location.pathname
+
+    status._404 = notFound
+
     return (
         <html lang={'de'}>
         <head>
@@ -40,12 +47,7 @@ export default function Document() {
             <meta name='robots' content='index, follow'/>
             <title>{title}</title>
             <link rel={'stylesheet'} href={'/style.css'}/>
-            <Routes>
-                <Route path={'/suche'} exact element={<Fragment/>}/>
-                <Route path={'/:law'} exact element={
-                    <script src={'/script.js'} defer/>
-                }/>
-            </Routes>
+            {!notFound && <script src={'/script.js'} defer/>}
 
             <link rel={'icon'} href={favicon32} type={'image/png'} sizes={'32x32'}/>
             <link rel={'icon'} href={favicon64} type={'image/png'} sizes={'64x64'}/>
@@ -69,13 +71,17 @@ export default function Document() {
             <meta property={'og:url'} content={url}/>
         </head>
         <body>
-        <App/>
-        <template id={'anchor_icon'}>
-            <Icon icon={'link'} className={styles.anchorIcon}/>
-        </template>
-        <template id={'link_copied_msg'}>
-            <div className={styles.linkCopiedMessage}>Link kopiert</div>
-        </template>
+        <App notFound={notFound}/>
+        {!notFound &&
+            <Fragment>
+                <template id={'anchor_icon'}>
+                    <Icon icon={'link'} className={styles.anchorIcon}/>
+                </template>
+                <template id={'link_copied_msg'}>
+                    <div className={styles.linkCopiedMessage}>Link kopiert</div>
+                </template>
+            </Fragment>
+        }
         </body>
         </html>
     )
