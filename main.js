@@ -11,7 +11,10 @@ const pe = new PrettyError()
 
 const minifierOptions = require('./config/html-minifier-options')
 
-// app.use(helmet())
+if (process.env.DEPLOY_ENV === 'nginx')
+    app.use(helmet({
+        hsts: false
+    }))
 app.use(shrinkRay())
 
 app.use((req, res, next) => {
@@ -94,4 +97,5 @@ setInterval(() => {
     fs.writeFileSync(filename, JSON.stringify(statsCopy), {encoding: 'utf8'})
 }, day)
 
-app.listen(3001)
+const port = process.env.DEPLOY_ENV === 'nginx' ? process.env.PORT : 3001
+app.listen(port)
