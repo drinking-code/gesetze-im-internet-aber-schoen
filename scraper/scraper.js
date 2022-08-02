@@ -5,6 +5,7 @@ const ProgressBar = require('progress');
 const getStructuredText = require('./get-structured-text')
 
 const host = 'https://www.gesetze-im-internet.de'
+
 class CustomResourceLoader extends ResourceLoader {
     fetch(url, options) {
         // dont load css files
@@ -12,6 +13,7 @@ class CustomResourceLoader extends ResourceLoader {
         return super.fetch(url, options);
     }
 }
+
 const resourceLoader = new CustomResourceLoader({
     userAgent: `Mozilla/5.0 (${process.platform || "unknown OS"}) AppleWebKit/537.36 (KHTML, like Gecko) gesetze-im-internet-aber-schoen.info/0.1 (Softdrink scraper)`,
 });
@@ -57,6 +59,8 @@ function getSectionDataFromHtml(html) {
     return data
 }
 
+const ROUTES_JSON = './data/routes.json'
+
 async function scrapeLaws() {
     console.info('Scraping list of all laws...')
 
@@ -67,7 +71,9 @@ async function scrapeLaws() {
     const listUrlElements = dom.window.document.querySelectorAll('.alphabet')
     const listUrls = Array.from(listUrlElements).map(element => element.href)
 
-    const routes = {}
+    const routes = fs.existsSync(ROUTES_JSON) ? JSON.parse(
+        fs.readFileSync(ROUTES_JSON, {encoding: 'utf8'})
+    ) : {}
     let lawUrls = []
 
     for (const listUrl of listUrls) {
@@ -94,6 +100,11 @@ async function scrapeLaws() {
     let a = 0
     for (const lawUrl of lawUrls) {
         a++
+        const key = lawUrl.replace(/index.html$/, '').replace(host, '').replace(/\//g, '')
+        if (routes.hasOwnProperty(key)) {
+            bar.tick()
+            continue
+        }
         /*if (a < 976) {
             bar.tick()
             continue
@@ -145,11 +156,10 @@ async function scrapeLaws() {
         routes[data.original.replace(host, '').replace(/\//g, '')] = `./${filePathStem}.json`
 
         fs.writeFileSync(filePath, JSON.stringify(data))
+        fs.writeFileSync(ROUTES_JSON, JSON.stringify(routes))
 
         bar.tick();
     }
-
-    fs.writeFileSync('./data/routes.json', JSON.stringify(routes))
 }
 
 if (!fs.existsSync('./data/laws/'))

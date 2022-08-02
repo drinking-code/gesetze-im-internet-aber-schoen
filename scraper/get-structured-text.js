@@ -74,6 +74,7 @@ function astToSimpleJsonMarkup(ast) {
             case '#text':
                 return makeStyledJsonMarkupText(child.text)
             case 'SPAN':
+                if (!child.children) return false
                 return makeStyledJsonMarkupText(child.children[0].text, {
                     bold: ['700', 'bold'].includes(child.style.fontWeight),
                     italic: child.style.fontStyle === 'italic',
@@ -88,7 +89,7 @@ function astToSimpleJsonMarkup(ast) {
             case 'TABLE':
                 return {type: 'table', content: child.html, text: child.text}
         }
-    }) ?? []
+    }).filter(v => !!v) ?? []
 }
 
 module.exports = getStructuredText

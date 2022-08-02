@@ -36,7 +36,7 @@ export default function Document({status}) {
     const title = [
         !!lawData && lawData.abbr,
         location.pathname === '/suche' && searchParams.get('q'),
-        notFound && 'Nicht gefunden',
+        location.pathname !== '/suche' && location.pathname !== '/' && notFound && 'Nicht gefunden',
         'Gesetze im Internet; aber schön'
     ].filter(v => !!v).join(' - ')
 
