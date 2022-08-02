@@ -21,9 +21,6 @@ function getKeyByValue(object, value) {
     return false
 }
 
-export const idMap = new Map()
-export const textOnlyLaws = {}
-
 function createId(data) {
     const id = uuid()
     idMap.set(id, data)
@@ -31,6 +28,15 @@ function createId(data) {
 }
 
 const INDEX_CACHE_FILE_NAME = '.index'
+export const SCRAPER_DIR = path.join(__dirname, '..', 'scraper', 'data')
+export const ID_MAP_FILE_NAME = path.join(SCRAPER_DIR, 'idMap.json')
+export const TEXT_ONLY_LAWS_DIR = path.join(SCRAPER_DIR, 'laws_text')
+
+export const idMap = fs.existsSync(ID_MAP_FILE_NAME)
+    ? new Map(JSON.parse(
+        fs.readFileSync(ID_MAP_FILE_NAME, {encoding: 'utf8'})
+    ))
+    : new Map()
 
 const index = fs.existsSync(INDEX_CACHE_FILE_NAME)
     ? lunr.Index.load(JSON.parse(
@@ -106,10 +112,13 @@ const index = fs.existsSync(INDEX_CACHE_FILE_NAME)
                 })
             })
 
-            textOnlyLaws[lawPath] = textOnlyLaw
+            fs.writeFileSync(path.join(TEXT_ONLY_LAWS_DIR, lawPath + '.json'), JSON.stringify(textOnlyLaw), {encoding: 'utf8'})
         })
     })
 
-fs.writeFileSync(INDEX_CACHE_FILE_NAME, JSON.stringify(index), {encoding: 'utf8'})
+if (!fs.existsSync(INDEX_CACHE_FILE_NAME))
+    fs.writeFileSync(INDEX_CACHE_FILE_NAME, JSON.stringify(index), {encoding: 'utf8'})
+if (!fs.existsSync(ID_MAP_FILE_NAME))
+    fs.writeFileSync(ID_MAP_FILE_NAME, JSON.stringify(Array.from(idMap.entries())), {encoding: 'utf8'})
 
 export default index

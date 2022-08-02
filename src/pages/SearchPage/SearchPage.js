@@ -3,12 +3,14 @@ import {useSearchParams} from 'react-router-dom'
 
 import SearchBar from '../../elements/SearchBar'
 import Logo from '../../elements/Logo/Logo'
-import index, {idMap, textOnlyLaws} from './lunr-index'
+import index, {idMap, TEXT_ONLY_LAWS_DIR} from './lunr-index'
 import markText from './mark-text'
 import truncateToMarked from './truncate-to-marked'
 
 import styles from './search-page.module.scss'
 import {cl} from '../../utils/classNames'
+import fs from 'fs'
+import path from 'path'
 
 export default function SearchPage() {
     const [searchParams] = useSearchParams()
@@ -27,7 +29,10 @@ export default function SearchPage() {
                         const fieldName = Object.keys(metadata[term])[0]
                         return metadata[term][fieldName].position
                     })
-                    const law = textOnlyLaws[location.lawPath]
+                    const law = JSON.parse(fs.readFileSync(
+                        path.join(TEXT_ONLY_LAWS_DIR, location.lawPath + '.json'),
+                        {encoding: 'utf8'}
+                    ))
                     const paragraph = law.content[location.index]
                     const field = Object.keys(metadata).map(term => {
                         return Object.keys(metadata[term])[0]
