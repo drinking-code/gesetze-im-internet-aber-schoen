@@ -10,8 +10,6 @@ import truncateToMarked from './truncate-to-marked'
 import styles from './search-page.module.scss'
 import {cl} from '../../utils/classNames'
 
-const laws = require.context('../../../scraper/data/laws/')
-
 export default function SearchPage() {
     const [searchParams] = useSearchParams()
 

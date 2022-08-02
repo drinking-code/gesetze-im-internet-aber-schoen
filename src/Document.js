@@ -8,7 +8,8 @@ import styles from './pages/LawPage/law-page.module.scss'
 import routes from '../scraper/data/routes.json'
 import Icon from './elements/Icon'
 
-const laws = require.context('../scraper/data/laws/')
+import fs from 'fs'
+import path from 'path'
 
 import favicon32 from './assets/images/favicon-32.png'
 import favicon64 from './assets/images/favicon-64.png'
@@ -23,7 +24,11 @@ export default function Document({status}) {
     let notFound = false
     let lawData;
     try {
-        lawData = laws(routes[location.pathname.replace(/\//g, '')])
+        const fileName = path.join(__dirname, '..', 'scraper', 'data', 'laws', routes[location.pathname.replace(/\//g, '')])
+        if (fs.existsSync(fileName)) {
+            lawData = fs.readFileSync(fileName, {encoding: 'utf8'})
+            lawData = JSON.parse(lawData)
+        }
     } catch (e) {
         notFound = true
     }
@@ -34,7 +39,8 @@ export default function Document({status}) {
         notFound && 'Nicht gefunden',
         'Gesetze im Internet; aber schön'
     ].filter(v => !!v).join(' - ')
-    const description = lawData?.content[0].content[0][0].content
+
+    const description = lawData?.content[0]?.content[0][0].content ?? ''
     const url = 'https://gesetze-im-internet-aber-schoen.info' + location.pathname
 
     return (

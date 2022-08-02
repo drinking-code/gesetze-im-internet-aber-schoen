@@ -5,7 +5,8 @@ import {v4 as uuid} from 'uuid'
 import lawsPaths from '../../../scraper/data/routes.json'
 import {urlAnchor} from '../../utils/string-cases'
 
-const laws = require.context('../../../scraper/data/laws/')
+import fs from 'fs'
+import path from 'path'
 
 lunrStemmerSupport(lunr)
 lunrDe(lunr)
@@ -39,10 +40,15 @@ const index = lunr(function () {
 
     this.metadataWhitelist = ['position']
 
-    laws.keys().forEach(lawName => {
+    Object.values(lawsPaths).forEach(lawName => {
         const lawPath = getKeyByValue(lawsPaths, lawName)
         if (!lawPath) return
-        const law = laws(lawName)
+        const fileName = path.join(__dirname, '..', 'scraper', 'data', 'laws', lawName)
+        if (!fs.existsSync(fileName)) return
+        const law = JSON.parse(
+            fs.readFileSync(fileName, {encoding: 'utf8'})
+        )
+
         this.add({
             id: createId({
                 type: 'law',

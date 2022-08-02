@@ -10,13 +10,18 @@ import {cl} from '../../utils/classNames'
 import {urlAnchor} from '../../utils/string-cases'
 import Logo from '../../elements/Logo'
 
-const laws = require.context('../../../scraper/data/laws/')
+import fs from 'fs'
+import path from 'path'
 
 export default function LawPage() {
     const {law} = useParams()
     let lawData
     try {
-        lawData = laws(routes[law])
+        const fileName = path.join(__dirname, '..', 'scraper', 'data', 'laws', routes[law])
+        if (fs.existsSync(fileName)) {
+            lawData = fs.readFileSync(fileName, {encoding: 'utf8'})
+            lawData = JSON.parse(lawData)
+        }
     } catch (e) {
     }
 

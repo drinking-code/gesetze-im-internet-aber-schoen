@@ -5,7 +5,14 @@ const ProgressBar = require('progress');
 const getStructuredText = require('./get-structured-text')
 
 const host = 'https://www.gesetze-im-internet.de'
-const resourceLoader = new ResourceLoader({
+class CustomResourceLoader extends ResourceLoader {
+    fetch(url, options) {
+        // dont load css files
+        if (url.endsWith('.css')) return Promise.resolve(Buffer.from(''))
+        return super.fetch(url, options);
+    }
+}
+const resourceLoader = new CustomResourceLoader({
     userAgent: `Mozilla/5.0 (${process.platform || "unknown OS"}) AppleWebKit/537.36 (KHTML, like Gecko) gesetze-im-internet-aber-schoen.info/0.1 (Softdrink scraper)`,
 });
 
@@ -72,7 +79,6 @@ async function scrapeLaws() {
         lawUrls = lawUrls.concat(
             Array.from(lawUrlElements).map(element => element.href)
         )
-
         break
     }
 
@@ -88,7 +94,7 @@ async function scrapeLaws() {
     let a = 0
     for (const lawUrl of lawUrls) {
         a++
-        /*if (a < 31) {
+        /*if (a < 44) {
             bar.tick()
             continue
         }*/
@@ -104,9 +110,9 @@ async function scrapeLaws() {
         const fullTitleElement = htmlVersionDocument.querySelector('.jnzitat')
         const stateElement = htmlVersionDocument.querySelector('.standangaben')
         const footnoteElement = htmlVersionDocument.querySelector('.jnfussnote .jurAbsatz')
-        const footnoteContent = footnoteElement.querySelector('pre')
-            ? footnoteElement.querySelector('pre').innerHTML
-            : footnoteElement.innerHTML
+        const footnoteContent = footnoteElement?.querySelector('pre')
+            ? footnoteElement?.querySelector('pre').innerHTML
+            : footnoteElement?.innerHTML
 
         const data = {
             original: lawUrl.replace(/index.html$/, ''),
@@ -132,7 +138,7 @@ async function scrapeLaws() {
             data.content.push(getSectionDataFromHtml(norm))
         )
 
-        const filePathStem = data.abbr.toLowerCase().replace(/[^a-z]/g, '')
+        const filePathStem = data.abbr.toLowerCase().replace(/[^a-z\d]/g, '')
         const filePath = `./data/laws/${filePathStem}.json`
 
         routes[data.original.replace(host, '').replace(/\//g, '')] = `./${filePathStem}.json`
