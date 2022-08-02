@@ -137,7 +137,7 @@ async function scrapeLaws() {
 
         bar.tick();
 
-        if (a > 4) break
+        // if (a > 4) break
     }
 
     fs.writeFileSync('./data/routes.json', JSON.stringify(routes))

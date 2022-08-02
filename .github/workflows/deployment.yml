@@ -5,58 +5,12 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [ 16.x ]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run build --if-present
-
-      - name: Cache build assets files
-        uses: actions/cache@v2
-        env:
-          cache-name: build-files
-        with:
-          path: |
-            build
-            build-server
-          key: ${{ runner.os }}-public-${{ env.cache-name }}-${{ github.sha }}
-
   deploy:
     name: Deploy
     needs: [ build ]
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Cache build assets files
-        uses: actions/cache@v2
-        env:
-          cache-name: build-files
-        with:
-          path: |
-            build
-            build-server
-          key: ${{ runner.os }}-public-${{ env.cache-name }}-${{ github.sha }}
-
       - name: Set ssh key
         run: |
           mkdir $HOME/.ssh
@@ -67,3 +21,7 @@ jobs:
           rsync -a --stats --delete --exclude-from .github/rsync-exclude-dev \
           -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" \
           ./ ${{ secrets.DEV_USERNAME }}@95.179.153.38:${{ secrets.DEV_DESTINATION }}
+      - name: Build on server
+        run: |
+          ssh -i $HOME/.ssh/key ${{ secrets.DEV_USERNAME }}@95.179.153.38:${{ secrets.DEV_DESTINATION }} \
+          "npm i && npm run build"
