@@ -51,7 +51,6 @@ export default function SearchPage() {
                                                 {markText(law[field], positions)}
                                             </span>
                                         }
-
                                     </article>
                                 </a>
                             </li>
