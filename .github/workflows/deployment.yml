@@ -21,8 +21,8 @@ jobs:
         run: |
           rsync -a --stats --delete --exclude-from .github/rsync-exclude-dev \
           -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" \
-          ./ ${{ secrets.DEV_USERNAME }}@95.179.153.38:${{ secrets.DEV_DESTINATION }}
+          ./ ${{ secrets.DEV_USERNAME }}@${{ secrets.DEV_IP }}:${{ secrets.DEV_DESTINATION }}
       - name: Build on server
         run: |
-          ssh -i $HOME/.ssh/key ${{ secrets.DEV_USERNAME }}@95.179.153.38 \
+          ssh -i $HOME/.ssh/key ${{ secrets.DEV_USERNAME }}@${{ secrets.DEV_IP }} \
           "cd ${{ secrets.DEV_DESTINATION }} && npm i && npm run build"
