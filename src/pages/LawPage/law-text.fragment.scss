@@ -24,8 +24,20 @@
     margin-top: 1.5rem;
     @include fonts.heading-2;
 
+    line-height: 1.3;
+
     .supTitle {
       font-weight: 700;
+
+      + span:before {
+        content: '-';
+
+        position: relative;
+        right: .5rem;
+
+        font-style: normal;
+        opacity: .3;
+      }
     }
   }
 

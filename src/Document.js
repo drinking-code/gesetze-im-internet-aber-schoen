@@ -40,7 +40,9 @@ export default function Document({status}) {
         'Gesetze im Internet; aber schön'
     ].filter(v => !!v).join(' - ')
 
-    const description = lawData?.content[0]?.content[0][0].content ?? ''
+    const description = location.pathname === '/'
+        ? 'Alle Gesetze und Verordnungen aus gesetze-im-internet.de, aber mit verbessertem Design inklusive Dark-Mode.'
+        : lawData?.content[0]?.content[0][0].content ?? ''
     const url = 'https://gesetze-im-internet-aber-schoen.info' + location.pathname
 
     return (
