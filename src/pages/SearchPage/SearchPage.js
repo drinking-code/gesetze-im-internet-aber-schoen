@@ -3,7 +3,7 @@ import {useSearchParams} from 'react-router-dom'
 
 import SearchBar from '../../elements/SearchBar'
 import Logo from '../../elements/Logo/Logo'
-import index, {idMap, TEXT_ONLY_LAWS_DIR} from './lunr-index'
+import {makeIndex, idMap, TEXT_ONLY_LAWS_DIR} from './lunr-index'
 import markText from './mark-text'
 import truncateToMarked from './truncate-to-marked'
 
@@ -14,6 +14,7 @@ import path from 'path'
 
 export default function SearchPage() {
     const [searchParams] = useSearchParams()
+    const index = makeIndex()
 
     return (
         <Fragment>
