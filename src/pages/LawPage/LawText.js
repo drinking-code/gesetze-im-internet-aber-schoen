@@ -1,5 +1,4 @@
 import {Fragment} from 'react'
-import {useLocation} from 'react-router-dom'
 
 import styles from './law-page.module.scss'
 import {cl} from '../../utils/classNames'

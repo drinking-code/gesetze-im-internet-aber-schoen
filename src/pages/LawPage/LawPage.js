@@ -28,6 +28,12 @@ export default function LawPage() {
     lawData.state = lawData.state?.map(text => [text, <br key={text}/>]).flat().slice(0, -1)
     lawData.footnote = lawData.footnote?.replace(/(<br>|\s)+$/, '')
 
+    const indexTOC = lawData.content.map(block =>
+        [block.supTitle,block.title, block.heading].includes('Inhaltsübersicht')
+    ).indexOf(true)
+    if (indexTOC > -1)
+        delete lawData.content[indexTOC]
+
     const headingText = block => [block.supTitle, block.title || block.heading].join(' ')
 
     return (

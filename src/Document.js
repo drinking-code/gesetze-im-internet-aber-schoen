@@ -33,6 +33,8 @@ export default function Document({status}) {
         notFound = true
     }
 
+    const host = 'https://gesetze-im-internet-aber-schoen.info'
+
     const title = [
         !!lawData && lawData.abbr,
         location.pathname === '/suche' && searchParams.get('q'),
@@ -42,8 +44,22 @@ export default function Document({status}) {
 
     const description = location.pathname === '/'
         ? 'Alle Gesetze und Verordnungen aus gesetze-im-internet.de, aber mit verbessertem Design inklusive Dark-Mode.'
-        : lawData?.content[0]?.content[0][0].content ?? ''
-    const url = 'https://gesetze-im-internet-aber-schoen.info' + location.pathname
+        : lawData?.content[0]?.content[0][0].content.substring(0,150) ?? ''
+    const url = host + location.pathname
+
+    const LDJson = {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "url": host,
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": host + '/suche?q={search_term_string}'
+            },
+            "query-input": "required name=search_term_string"
+        }
+    }
 
     return (
         <html lang={'de'}>
@@ -54,6 +70,9 @@ export default function Document({status}) {
             <title>{title}</title>
             <link rel={'stylesheet'} href={'/style.css'}/>
             {!notFound && <script src={'/script.js'} defer/>}
+            {location.pathname === '/' &&
+                <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(LDJson)}}/>
+            }
 
             <link rel={'icon'} href={favicon32} type={'image/png'} sizes={'32x32'}/>
             <link rel={'icon'} href={favicon64} type={'image/png'} sizes={'64x64'}/>
