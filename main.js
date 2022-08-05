@@ -45,6 +45,7 @@ let stats = []
 
 app.use(async (req, res, next) => {
     const startTime = performance.now()
+    const timestamp = Date.now()
     if (req.method !== 'GET') return next()
     if (process.env.NODE_ENV === 'production' && cache.has(req.url))
         return res.send(cache.get(req.url))
@@ -79,7 +80,7 @@ app.use(async (req, res, next) => {
     cache.set(req.url, htmlString)
     const endTime = performance.now()
     stats.push({
-        startTime, endTime,
+        startTime, endTime, timestamp,
         url: req.url
     })
 })
