@@ -17,6 +17,8 @@ import favicon256 from './assets/images/favicon-256.png'
 import favicon512 from './assets/images/favicon-512.png'
 import favicon1024 from './assets/images/favicon-1024.png'
 import favicon2048 from './assets/images/favicon-2048.png'
+import {TEXT_ONLY_LAWS_DIR} from './pages/SearchPage/lunr-index'
+import {escapeNonSlash} from './utils/string'
 
 export default function Document({status}) {
     const location = useLocation()
@@ -24,7 +26,7 @@ export default function Document({status}) {
     let notFound = false
     let lawData;
     try {
-        const fileName = path.join(__dirname, '..', 'scraper', 'data', 'laws', routes[location.pathname.replace(/\//g, '')])
+        const fileName = path.join(TEXT_ONLY_LAWS_DIR, routes[location.pathname.replace(/\//g, '')])
         if (fs.existsSync(fileName)) {
             lawData = fs.readFileSync(fileName, {encoding: 'utf8'})
             lawData = JSON.parse(lawData)
@@ -34,17 +36,23 @@ export default function Document({status}) {
     }
 
     const host = 'https://gesetze-im-internet-aber-schoen.info'
+    const aboutPathEscaped = escapeNonSlash('/über')
 
     const title = [
         !!lawData && lawData.abbr,
         location.pathname === '/suche' && searchParams.get('q'),
-        location.pathname !== '/suche' && location.pathname !== '/' && notFound && 'Nicht gefunden',
+        location.pathname === aboutPathEscaped && 'Über',
+        !['/suche', aboutPathEscaped, '/'].includes(location.pathname) && notFound && 'Nicht gefunden',
         'Gesetze im Internet; aber schön'
     ].filter(v => !!v).join(' - ')
 
-    const description = location.pathname === '/'
-        ? 'Alle Gesetze und Verordnungen aus gesetze-im-internet.de, aber mit verbessertem Design inklusive Dark-Mode.'
-        : lawData?.content[0]?.content[0][0].content.substring(0,150) ?? ''
+    if (lawData)
+        lawData.content = lawData?.content?.filter(block => ![block.supTitle, block.title, block.heading].includes('Inhaltsübersicht'))
+    const description = location.pathname === '/suche'
+        ? ''
+        : [aboutPathEscaped, '/'].includes(location.pathname)
+            ? 'Alle Gesetze und Verordnungen aus gesetze-im-internet.de, aber mit verbessertem Design inklusive Dark-Mode.'
+            : lawData?.content[0]?.text.substring(0, 150) ?? ''
     const url = host + location.pathname
 
     const LDJson = {
@@ -83,17 +91,19 @@ export default function Document({status}) {
             <link rel={'apple-touch-icon'} sizes={'1024x1024'} href={favicon1024}/>
             <link rel={'apple-touch-icon'} sizes={'2048x2048'} href={favicon2048}/>
 
-            <meta name={'twitter:card'} content={'summary'}/>
-            <meta property={'og:site_name'} content={title}/>
-            <meta property={'og:locale'} content={'de_DE'}/>
-            <meta property={'og:type'} content={'website'}/>
-            <meta property={'og:title'} content={title}/>
-            <meta name={'twitter:title'} content={title}/>
-            <meta name={'description'} content={description}/>
-            <meta property={'og:description'} content={description}/>
-            <meta name={'twitter:description'} content={description}/>
-            <link rel={'canonical'} href={url}/>
-            <meta property={'og:url'} content={url}/>
+            {location.pathname !== '/suche' && <Fragment>
+                <meta name={'twitter:card'} content={'summary'}/>
+                <meta property={'og:site_name'} content={title}/>
+                <meta property={'og:locale'} content={'de_DE'}/>
+                <meta property={'og:type'} content={'website'}/>
+                <meta property={'og:title'} content={title}/>
+                <meta name={'twitter:title'} content={title}/>
+                <meta name={'description'} content={description}/>
+                <meta property={'og:description'} content={description}/>
+                <meta name={'twitter:description'} content={description}/>
+                <link rel={'canonical'} href={url}/>
+                <meta property={'og:url'} content={url}/>
+            </Fragment>}
         </head>
         <body>
         <App notFound={notFound} status={status}/>

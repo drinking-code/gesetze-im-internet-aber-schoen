@@ -14,9 +14,9 @@ export default function AboutPage() {
                 Hier können Sie all die Gesetze und Verordnungen aus gesetze-im-internet.de ansehen, aber mit
                 verbessertem Design inklusive Dark-Mode.</p>
             <p>gesetze-im-internet-aber-schoen.info ist in keiner Weise verbunden mit der Bundesregierung, dem
-                Bundesministerium der Justiz, dem Bundesamt für Justiz, oder jeglichen anderen öffentlichen
-                Institutionen.</p>
-            <p>Es wird kein Anspruch auf Vollständigkeit und Ausschließlichkeit der Inhalte auf
+                Bundesministerium der Justiz, dem Bundesamt für Justiz, oder jeglicher anderer öffentlicher
+                Institution.</p>
+            <p>Es wird kein Anspruch auf Vollständigkeit oder Richtigkeit der Inhalte auf
                 gesetze-im-internet-aber-schoen.info gestellt. Alle Inhalte dienen ausschließlich Informationszwecken.
                 Die zur Verfügung gestellten Inhalte stellen keine Rechtsberatung dar.</p>
         </main>

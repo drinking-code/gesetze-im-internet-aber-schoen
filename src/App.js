@@ -4,12 +4,9 @@ import LawPage from './pages/LawPage'
 import SearchPage from './pages/SearchPage'
 import NotFoundPage from './pages/NotFoundPage'
 import AboutPage from './pages/AboutPage'
+import {escapeNonSlash} from './utils/string'
 
 export default function App({notFound, status}) {
-    function escapeNonSlash(str) {
-        return str.split('/').map(encodeURIComponent).join('/')
-    }
-
     return (
         <Routes>
             <Route path={'/'} exact element={<LandingPage/>}/>

@@ -2,7 +2,7 @@ import {Fragment} from 'react'
 
 import styles from './law-page.module.scss'
 import {cl} from '../../utils/classNames'
-import {urlAnchor} from '../../utils/string-cases'
+import {urlAnchor} from '../../utils/string'
 
 export default function LawText({data, headingText}) {
     data.content = data.content.map(block => {

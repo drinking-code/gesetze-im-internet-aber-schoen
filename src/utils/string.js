@@ -22,3 +22,7 @@ export function urlAnchor(string) {
         .replace(/ü/g, 'ue')
         .replace(/[^a-z\d_-]/g, '')
 }
+
+export function escapeNonSlash(str) {
+    return str.split('/').map(encodeURIComponent).join('/')
+}

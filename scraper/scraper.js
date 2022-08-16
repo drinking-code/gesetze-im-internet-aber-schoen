@@ -98,6 +98,7 @@ async function scrapeLaws() {
     });
 
     let a = 0
+    let failed = 0
     for (const lawUrl of lawUrls) {
         a++
         const key = lawUrl.replace(/index.html$/, '').replace(host, '').replace(/\//g, '')
@@ -109,54 +110,59 @@ async function scrapeLaws() {
             bar.tick()
             continue
         }*/
-        const dom = await JSDOM.fromURL(lawUrl, {
-            resources: resourceLoader,
-        })
-        const htmlVersionLink = getHtmlVersionLink(dom)
-        const htmlVersionDom = await JSDOM.fromURL(htmlVersionLink, {
-            resources: resourceLoader,
-        })
-        const htmlVersionDocument = htmlVersionDom.window.document
-        const titleElement = htmlVersionDocument.querySelector('.jnlangue')
-        const fullTitleElement = htmlVersionDocument.querySelector('.jnzitat')
-        const stateElement = htmlVersionDocument.querySelector('.standangaben')
-        const footnoteElement = htmlVersionDocument.querySelector('.jnfussnote .jurAbsatz')
-        const footnoteContent = footnoteElement?.querySelector('pre')
-            ? footnoteElement?.querySelector('pre').innerHTML
-            : footnoteElement?.innerHTML
 
-        const data = {
-            original: lawUrl.replace(/index.html$/, ''),
-            title: titleElement && titleElement.textContent.trim().replace(/\s$/, ''),
-            abbr: titleElement && titleElement.parentNode.parentNode.querySelector('p').textContent,
-            dateOfIssue: titleElement && titleElement.parentNode.parentNode.querySelector('p').nextSibling
-                .textContent.replace('Ausfertigungsdatum: ', ''),
-            fullTitle: fullTitleElement && fullTitleElement.querySelector(':nth-child(2)').textContent,
-            state: stateElement && Array.from(stateElement.querySelectorAll('tbody tr td:nth-child(2)')).map(el => el.textContent),
-            footnote: footnoteContent,
+        try {
+            const dom = await JSDOM.fromURL(lawUrl, {
+                resources: resourceLoader,
+            })
+            const htmlVersionLink = getHtmlVersionLink(dom)
+            const htmlVersionDom = await JSDOM.fromURL(htmlVersionLink, {
+                resources: resourceLoader,
+            })
+            const htmlVersionDocument = htmlVersionDom.window.document
+            const titleElement = htmlVersionDocument.querySelector('.jnlangue')
+            const fullTitleElement = htmlVersionDocument.querySelector('.jnzitat')
+            const stateElement = htmlVersionDocument.querySelector('.standangaben')
+            const footnoteElement = htmlVersionDocument.querySelector('.jnfussnote .jurAbsatz')
+            const footnoteContent = footnoteElement?.querySelector('pre')
+                ? footnoteElement?.querySelector('pre').innerHTML
+                : footnoteElement?.innerHTML
+
+            const data = {
+                original: lawUrl.replace(/index.html$/, ''),
+                title: titleElement && titleElement.textContent.trim().replace(/\s$/, ''),
+                abbr: titleElement && titleElement.parentNode.parentNode.querySelector('p').textContent,
+                dateOfIssue: titleElement && titleElement.parentNode.parentNode.querySelector('p').nextSibling
+                    .textContent.replace('Ausfertigungsdatum: ', ''),
+                fullTitle: fullTitleElement && fullTitleElement.querySelector(':nth-child(2)').textContent,
+                state: stateElement && Array.from(stateElement.querySelectorAll('tbody tr td:nth-child(2)')).map(el => el.textContent),
+                footnote: footnoteContent,
+            }
+            if (data.state && data.state.length === 0)
+                data.state = [stateElement.textContent]
+
+            const norms = Array.from(htmlVersionDocument.querySelectorAll('.jnnorm'))
+            if (norms[0] && norms[0].title === 'Rahmen')
+                norms.shift() // remove metadata
+            if (norms[0] && norms[0].querySelector('h2, h3').textContent === 'Inhaltsübersicht')
+                norms.shift() // remove table of contents
+
+            data.content = []
+            norms.forEach(norm =>
+                data.content.push(getSectionDataFromHtml(norm))
+            )
+
+            const filePathStem = data.original.replace(host, '').replace(/\//g, '')
+            const filePath = `./data/laws/${filePathStem}.json`
+
+            routes[filePathStem] = `./${filePathStem}.json`
+
+            fs.writeFileSync(filePath, JSON.stringify(data))
+            fs.writeFileSync(ROUTES_JSON, JSON.stringify(routes))
+        } catch (e) {
+            failed++
+            console.warn(e)
         }
-        if (data.state && data.state.length === 0)
-            data.state = [stateElement.textContent]
-
-        const norms = Array.from(htmlVersionDocument.querySelectorAll('.jnnorm'))
-        if (norms[0] && norms[0].title === 'Rahmen')
-            norms.shift() // remove metadata
-        if (norms[0] && norms[0].querySelector('h2, h3').textContent === 'Inhaltsübersicht')
-            norms.shift() // remove table of contents
-
-        data.content = []
-        norms.forEach(norm =>
-            data.content.push(getSectionDataFromHtml(norm))
-        )
-
-        const filePathStem = data.abbr?.toLowerCase().replace(/[^a-z\d]/g, '')
-            ?? data.original.replace(host, '').replace(/\//g, '')
-        const filePath = `./data/laws/${filePathStem}.json`
-
-        routes[data.original.replace(host, '').replace(/\//g, '')] = `./${filePathStem}.json`
-
-        fs.writeFileSync(filePath, JSON.stringify(data))
-        fs.writeFileSync(ROUTES_JSON, JSON.stringify(routes))
 
         bar.tick();
     }

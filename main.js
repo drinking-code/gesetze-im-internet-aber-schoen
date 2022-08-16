@@ -10,6 +10,7 @@ const PrettyError = require('pretty-error')
 const pe = new PrettyError()
 
 const minifierOptions = require('./config/html-minifier-options')
+const errorHtml = fs.readFileSync('public/error.html', {encoding: 'utf8'})
 
 if (process.env.DEPLOY_ENV === 'nginx')
     app.use(helmet({
@@ -42,6 +43,19 @@ Allow: /
 const cache = new Map()
 
 let stats = []
+const builtFile = './build/index.js'
+
+if (process.env.NODE_ENV === 'development') {
+    fs.watchFile(builtFile, () => {
+            // remove src/ from require cache
+            for (const modulePath in require.cache) {
+                if (modulePath.startsWith(path.join(__dirname, 'build'))) {
+                    delete require.cache[modulePath]
+                }
+            }
+        }
+    )
+}
 
 app.use(async (req, res, next) => {
     const startTime = performance.now()
@@ -55,24 +69,16 @@ app.use(async (req, res, next) => {
         _404: false
     }
     try {
-        const html = require('./build/index.js')?.default(req.url, status)
+        const html = require(builtFile)?.default(req.url, status)
 
         htmlString = '<!DOCTYPE html>'
         htmlString += await minify(html, minifierOptions)
         htmlString += "<!--\n\n/\\\n |\\~~|\n | \\ |\n |___|\n\n-->"
     } catch (err) {
         const renderedError = pe.render(err);
-        console.log(renderedError);
-        htmlString = 'Internal Error'
-    } finally {
-        if (process.env.NODE_ENV === 'development') {
-            // remove src/ from require cache
-            for (const modulePath in require.cache) {
-                if (modulePath.startsWith(path.join(__dirname, 'build'))) {
-                    delete require.cache[modulePath]
-                }
-            }
-        }
+        console.log(renderedError); // todo: log in file
+        htmlString = errorHtml
+        res.status(500)
     }
     if (status._404)
         res.status(404)
@@ -96,7 +102,7 @@ setInterval(() => {
 
     const datetime = new Date();
     const filename = path.join(__dirname, 'logs', datetime.toISOString().slice(0, 10) + '.json')
-    if (fs.existsSync(filename)){
+    if (fs.existsSync(filename)) {
         const existingStats = JSON.parse(fs.readFileSync(filename, {encoding: 'utf8'}))
         statsCopy = existingStats.concat(statsCopy)
     }

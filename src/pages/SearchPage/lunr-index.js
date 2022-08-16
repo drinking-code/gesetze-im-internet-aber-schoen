@@ -3,7 +3,7 @@ import lunrStemmerSupport from 'lunr-languages/lunr.stemmer.support'
 import lunrDe from 'lunr-languages/lunr.de'
 import {v4 as uuid} from 'uuid'
 import lawsPaths from '../../../scraper/data/routes.json'
-import {urlAnchor} from '../../utils/string-cases'
+import {urlAnchor} from '../../utils/string'
 
 import fs from 'fs'
 import path from 'path'

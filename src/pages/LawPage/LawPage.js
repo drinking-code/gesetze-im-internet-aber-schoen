@@ -7,7 +7,7 @@ import LawText from './LawText'
 import routes from '../../../scraper/data/routes.json'
 import styles from './law-page.module.scss'
 import {cl} from '../../utils/classNames'
-import {urlAnchor} from '../../utils/string-cases'
+import {urlAnchor} from '../../utils/string'
 import Logo from '../../elements/Logo'
 
 import fs from 'fs'
