@@ -3,7 +3,7 @@ import {useSearchParams} from 'react-router-dom'
 
 import SearchBar from '../../elements/SearchBar'
 import Logo from '../../elements/Logo/Logo'
-import {makeIndex, idMap, TEXT_ONLY_LAWS_DIR} from './lunr-index'
+import {makeIndex, idMap, TEXT_ONLY_LAWS_DIR} from './flexsearch-index'
 import markText from './mark-text'
 import truncateToMarked from './truncate-to-marked'
 
@@ -23,8 +23,9 @@ export default function SearchPage() {
                 <SearchBar className={styles.searchBar} value={searchParams.get('q')}/>
             </header>
             <ol className={styles.resultsList}>
-                {index.search(searchParams.get('q')).map((result, i) => {
-                    const location = idMap.get(result.ref)
+                {index.search(searchParams.get('q'), {enrich: true}).map((result, i) => {
+                    console.log(result)
+                    /*const location = idMap.get(result.ref)
                     const metadata = result.matchData.metadata
                     const positions = Object.keys(metadata).map(term => {
                         const fieldName = Object.keys(metadata[term])[0]
@@ -76,7 +77,7 @@ export default function SearchPage() {
                                 </a>
                             </li>
                         )
-                    }
+                    }*/
                 })}
             </ol>
         </Fragment>

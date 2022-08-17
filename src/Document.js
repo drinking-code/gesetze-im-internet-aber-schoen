@@ -17,7 +17,7 @@ import favicon256 from './assets/images/favicon-256.png'
 import favicon512 from './assets/images/favicon-512.png'
 import favicon1024 from './assets/images/favicon-1024.png'
 import favicon2048 from './assets/images/favicon-2048.png'
-import {TEXT_ONLY_LAWS_DIR} from './pages/SearchPage/lunr-index'
+import {TEXT_ONLY_LAWS_DIR} from './pages/SearchPage/flexsearch-index'
 import {escapeNonSlash} from './utils/string'
 
 export default function Document({status}) {
