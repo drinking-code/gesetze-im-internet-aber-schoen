@@ -17,7 +17,12 @@ function getKeyByValue(object, value) {
 }
 
 function createId(data) {
-    const id = uuid()
+    const byteLength = 4
+    let id
+    while (true) {
+        id = randomBytes(byteLength).readUIntBE(0, byteLength)
+        if (!idMap.has(id)) break
+    }
     idMap.set(id, data)
     return id
 }
@@ -36,6 +41,7 @@ export const idMap = fs.existsSync(ID_MAP_FILE_NAME)
 const flexsearchIndex = new Document({
     cache: 100,
     language: 'de',
+    charset: 'latin:simple',
     document: {
         id: 'id',
         index: [{
@@ -53,7 +59,8 @@ export function makeIndex() {
         return flexsearchIndex
 
     if (fs.existsSync(INDEX_CACHE_FILE_NAME)) {
-        console.log('index file exists')
+        // console.log('index file exists')
+        indexIsBuilt = true
         const indexData = JSON.parse(
             fs.readFileSync(INDEX_CACHE_FILE_NAME, {encoding: 'utf8'})
         )
@@ -120,7 +127,7 @@ export function makeIndex() {
         })
     })
 
-    console.log('built index')
+    // console.log('built index')
 
     indexIsBuilt = true
 
@@ -129,6 +136,7 @@ export function makeIndex() {
             ? JSON.parse(fs.readFileSync(INDEX_CACHE_FILE_NAME, {encoding: 'utf8'}))
             : {}
         indexData[key] = data
+        // console.log(key)
         fs.writeFileSync(INDEX_CACHE_FILE_NAME, JSON.stringify(indexData), {encoding: 'utf8'})
     })
     fs.writeFileSync(ID_MAP_FILE_NAME, JSON.stringify(Array.from(idMap.entries())), {encoding: 'utf8'})

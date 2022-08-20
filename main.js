@@ -48,6 +48,7 @@ const builtFile = './build/index.js'
 if (process.env.NODE_ENV === 'development') {
     fs.watchFile(builtFile, () => {
             // remove src/ from require cache
+            console.log('delete cache')
             for (const modulePath in require.cache) {
                 if (modulePath.startsWith(path.join(__dirname, 'build'))) {
                     delete require.cache[modulePath]
