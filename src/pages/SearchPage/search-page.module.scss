@@ -67,6 +67,30 @@
     }
   }
 
+  .directResult {
+    $margin-bottom: 3rem;
+    position: relative;
+    margin-bottom: $margin-bottom;
+
+    &:after {
+      content: '';
+      $lines-distance: 2px;
+      $lines-width: 1px;
+
+      position: absolute;
+      bottom: calc(#{$margin-bottom} / -2);
+
+      height: $lines-distance;
+      width: 100%;
+
+      border-width: 0;
+      border-top-width: 1px;
+      border-bottom-width: 1px;
+      border-style: solid;
+      @include colors.color(border-color, text)
+    }
+  }
+
   .resultHeading {
     margin-top: 0;
     margin-bottom: .5rem;
