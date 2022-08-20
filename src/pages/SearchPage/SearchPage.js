@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 import {Fragment} from 'react'
 import {useSearchParams} from 'react-router-dom'
 
@@ -6,15 +9,22 @@ import Logo from '../../elements/Logo/Logo'
 import {makeIndex, idMap, TEXT_ONLY_LAWS_DIR} from './flexsearch-index'
 import markText from './mark-text'
 import truncateToMarked from './truncate-to-marked'
+import {urlAnchor} from '../../utils/string'
+import parseLawReference from '../../utils/parse-law-reference'
+import findAnchorInLaw from '../../utils/find-anchor-in-law'
 
 import styles from './search-page.module.scss'
 import {cl} from '../../utils/classNames'
-import fs from 'fs'
-import path from 'path'
 
 export default function SearchPage() {
     const [searchParams] = useSearchParams()
     const index = makeIndex()
+
+    const directResult = parseLawReference(searchParams.get('q'))
+    directResult.paragraph = findAnchorInLaw(directResult.law.path, directResult.classifications)
+    directResult.anchor = urlAnchor(
+        [directResult.paragraph.supTitle, directResult.paragraph.title || directResult.paragraph.heading].join(' ')
+    )
 
     const results = index.search(searchParams.get('q'))
         .map(result =>
@@ -34,6 +44,12 @@ export default function SearchPage() {
                 <SearchBar className={styles.searchBar} value={searchParams.get('q')}/>
             </header>
             <ol className={styles.resultsList}>
+                {directResult.law && Array.from(Object.values(directResult.classifications)).length !== 0 && (() =>
+                        <Item link={`/${directResult.law.url}#${directResult.anchor}`} subtitle={directResult.law.title}
+                            title={[directResult.paragraph?.supTitle, directResult.paragraph?.heading].join(' ').trim()}
+                              className={styles.directResult}
+                        />
+                )()}
                 {results.map((result, i) => {
                     const {id} = result
                     // dedupe results
@@ -82,11 +98,11 @@ export default function SearchPage() {
     )
 }
 
-function Item({link, isFullLaw, title, subtitle, children}) {
+function Item({link, isFullLaw, title, subtitle, children, className}) {
     return (
         <li>
             <a href={link}>
-                <article className={cl(styles.result, isFullLaw && styles.law)}>
+                <article className={cl(styles.result, isFullLaw && styles.law, className)}>
                     <h2 className={styles.resultHeading}>
                         <span className={styles.main}>{title}</span>
                         {subtitle && <span className={styles.appendix}>{subtitle}</span>}
