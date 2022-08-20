@@ -91,6 +91,13 @@ export default function Document({status}) {
             <link rel={'apple-touch-icon'} sizes={'1024x1024'} href={favicon1024}/>
             <link rel={'apple-touch-icon'} sizes={'2048x2048'} href={favicon2048}/>
 
+            <link rel="preload" href="/3a50d213717c7eabef3b.woff2" as="font" type="font/woff2"/> {/* Atkinson */}
+            <link rel="preload" href="/86b9bdcc67313c517697.woff2" as="font" type="font/woff2"/> {/* Atkinson Bold */}
+            <link rel="preload" href="/ab76ccd83f5048de3683.woff2" as="font" type="font/woff2"/> {/* Atkinson Italic */}
+            <link rel="preload" href="/161681f861ff8ee0393a.woff2" as="font" type="font/woff2"/> {/* Atkinson Bold Italic */}
+            <link rel="preload" href="/7eb6750602d30e543f81.woff2" as="font" type="font/woff2"/> {/* Playfair */}
+            <link rel="preload" href="/719c1bbd67f6dee4a446.woff2" as="font" type="font/woff2"/> {/* Playfair Italic */}
+
             {location.pathname !== '/suche' && <Fragment>
                 <meta name={'twitter:card'} content={'summary'}/>
                 <meta property={'og:site_name'} content={title}/>
