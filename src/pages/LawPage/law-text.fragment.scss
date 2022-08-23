@@ -18,6 +18,12 @@
       margin-bottom: .5rem;
       @include fonts.sup-heading;
     }
+
+    @media (max-width: 1024px) {
+      word-break: break-all;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
   }
 
   .heading2 {

@@ -39,6 +39,10 @@ export default function LawText({data, headingText}) {
 
         function textFragment(part, i) {
             if (!part) return
+            if (Array.isArray(part)) {
+                const allParts = part.map(textFragment)
+                return <div key={i}>{allParts}</div>
+            }
             switch (part.type) {
                 case 'text':
                     if (part.content === '') return

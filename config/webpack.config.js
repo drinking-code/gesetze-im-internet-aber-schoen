@@ -20,7 +20,7 @@ module.exports = {
             type: 'commonjs2',
         },
         clean: {
-            keep: /script\.js$/
+            keep: /script\.js(\.map)?$/
         }
     },
     module: makeModule(),

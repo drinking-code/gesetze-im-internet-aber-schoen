@@ -106,7 +106,7 @@ async function scrapeLaws() {
             bar.tick()
             continue
         }
-        /*if (a < 976) {
+        /*if (a < 2426) {
             bar.tick()
             continue
         }*/

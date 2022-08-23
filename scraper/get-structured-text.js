@@ -71,6 +71,10 @@ function astToSimpleJsonMarkup(ast) {
     return children?.map(child => {
         switch (child.tagName) {
             case 'NOTINDEXED':
+                if (child.children && child.children.length > 0) {
+                    return child.children.map(astToSimpleJsonMarkup)
+                }
+            // just set text if no children exist
             case '#text':
                 return makeStyledJsonMarkupText(child.text)
             case 'SPAN':
