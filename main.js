@@ -3,7 +3,7 @@ const fs = require('fs')
 
 const app = require('express')()
 const helmet = require('helmet')
-const shrinkRay = require('r')
+const shrinkRay = require('shrink-ray-current')
 
 require('./server/stats')
 const sitemap = require('./server/sitemap')
