@@ -23,6 +23,8 @@ export default function SearchPage() {
     const directResult = parseLawReference(searchParams.get('q'))
     if (directResult.law && Array.from(Object.values(directResult.classifications)).length !== 0) {
         directResult.paragraph = findAnchorInLaw(directResult.law.path, directResult.classifications)
+    }
+    if (directResult.paragraph) {
         directResult.anchor = urlAnchor(
             [directResult.paragraph.supTitle, directResult.paragraph.title || directResult.paragraph.heading].join(' ')
         )
@@ -46,7 +48,7 @@ export default function SearchPage() {
                 <SearchBar className={styles.searchBar} value={searchParams.get('q')}/>
             </header>
             <ol className={styles.resultsList}>
-                {directResult.law && Array.from(Object.values(directResult.classifications)).length !== 0 && (() =>
+                {directResult.paragraph && (() =>
                         <Item link={`/${directResult.law.url}#${directResult.anchor}`} subtitle={directResult.law.title}
                               title={[directResult.paragraph?.supTitle, directResult.paragraph?.heading].join(' ').trim()}
                               className={styles.directResult}
