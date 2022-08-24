@@ -21,10 +21,12 @@ export default function SearchPage() {
     const index = makeIndex()
 
     const directResult = parseLawReference(searchParams.get('q'))
-    directResult.paragraph = findAnchorInLaw(directResult.law.path, directResult.classifications)
-    directResult.anchor = urlAnchor(
-        [directResult.paragraph.supTitle, directResult.paragraph.title || directResult.paragraph.heading].join(' ')
-    )
+    if (directResult.law && Array.from(Object.values(directResult.classifications)).length !== 0) {
+        directResult.paragraph = findAnchorInLaw(directResult.law.path, directResult.classifications)
+        directResult.anchor = urlAnchor(
+            [directResult.paragraph.supTitle, directResult.paragraph.title || directResult.paragraph.heading].join(' ')
+        )
+    }
 
     const results = index.search(searchParams.get('q'))
         .map(result =>
@@ -46,7 +48,7 @@ export default function SearchPage() {
             <ol className={styles.resultsList}>
                 {directResult.law && Array.from(Object.values(directResult.classifications)).length !== 0 && (() =>
                         <Item link={`/${directResult.law.url}#${directResult.anchor}`} subtitle={directResult.law.title}
-                            title={[directResult.paragraph?.supTitle, directResult.paragraph?.heading].join(' ').trim()}
+                              title={[directResult.paragraph?.supTitle, directResult.paragraph?.heading].join(' ').trim()}
                               className={styles.directResult}
                         />
                 )()}
