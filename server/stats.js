@@ -13,7 +13,7 @@ setInterval(() => {
     stats = []
 
     const datetime = new Date();
-    const filename = path.join(__dirname, 'logs', datetime.toISOString().slice(0, 10) + '.json')
+    const filename = path.join(__dirname, '..', 'logs', datetime.toISOString().slice(0, 10) + '.json')
     if (fs.existsSync(filename)) {
         const existingStats = JSON.parse(fs.readFileSync(filename, {encoding: 'utf8'}))
         statsCopy = existingStats.concat(statsCopy)
