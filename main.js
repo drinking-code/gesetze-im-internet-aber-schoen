@@ -1,16 +1,13 @@
 const path = require('path')
 const fs = require('fs')
-const {performance} = require('perf_hooks')
 
 const app = require('express')()
 const helmet = require('helmet')
-const shrinkRay = require('shrink-ray-current')
-const {minify} = require('html-minifier-terser')
-const PrettyError = require('pretty-error')
-const pe = new PrettyError()
+const shrinkRay = require('r')
 
-const minifierOptions = require('./config/html-minifier-options')
-const errorHtml = fs.readFileSync('public/error.html', {encoding: 'utf8'})
+require('./server/stats')
+const sitemap = require('./server/sitemap')
+const {render, builtFile} = require('./server/render')
 
 if (process.env.DEPLOY_ENV === 'nginx')
     app.use(helmet({
@@ -34,81 +31,24 @@ app.use((req, res, next) => {
 
 app.get('/robots.txt', (req, res) => {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-    res.send(`\
-User-agent: *
-Allow: /
-`)
+    res.send("User-agent: *\nAllow: /")
 })
 
-const cache = new Map()
-
-let stats = []
-const builtFile = './build/index.js'
+app.get('/sitemap.xml', sitemap)
 
 if (process.env.NODE_ENV === 'development') {
     fs.watchFile(builtFile, () => {
-            // remove src/ from require cache
-            console.log('delete cache')
-            for (const modulePath in require.cache) {
-                if (modulePath.startsWith(path.join(__dirname, 'build'))) {
-                    delete require.cache[modulePath]
-                }
+        // remove src/ from require cache
+        console.log('delete cache')
+        for (const modulePath in require.cache) {
+            if (modulePath.startsWith(path.join(__dirname, 'build'))) {
+                delete require.cache[modulePath]
             }
         }
-    )
+    })
 }
 
-app.use(async (req, res, next) => {
-    const startTime = performance.now()
-    const timestamp = Date.now()
-    if (req.method !== 'GET') return next()
-    if (process.env.NODE_ENV === 'production' && cache.has(req.url))
-        return res.send(cache.get(req.url))
-
-    let htmlString
-    const status = {
-        _404: false
-    }
-    try {
-        const html = require(builtFile)?.default(req.url, status)
-
-        htmlString = '<!DOCTYPE html>'
-        htmlString += await minify(html, minifierOptions)
-        htmlString += "<!--\n\n/\\\n |\\~~|\n | \\ |\n |___|\n\n-->"
-    } catch (err) {
-        const renderedError = pe.render(err);
-        console.log(renderedError); // todo: log in file
-        htmlString = errorHtml
-        res.status(500)
-    }
-    if (status._404)
-        res.status(404)
-    res.send(htmlString)
-    cache.set(req.url, htmlString)
-    const endTime = performance.now()
-    stats.push({
-        startTime, endTime, timestamp,
-        url: req.url
-    })
-})
-
-const second = 1000
-const minute = second * 60
-const hour = minute * 60
-const day = hour * 24
-
-setInterval(() => {
-    let statsCopy = [...stats]
-    stats = []
-
-    const datetime = new Date();
-    const filename = path.join(__dirname, 'logs', datetime.toISOString().slice(0, 10) + '.json')
-    if (fs.existsSync(filename)) {
-        const existingStats = JSON.parse(fs.readFileSync(filename, {encoding: 'utf8'}))
-        statsCopy = existingStats.concat(statsCopy)
-    }
-    fs.writeFileSync(filename, JSON.stringify(statsCopy), {encoding: 'utf8'})
-}, minute * 10)
+app.use(render)
 
 const port = process.env.DEPLOY_ENV === 'nginx' ? process.env.PORT : 3001
 app.listen(port)
