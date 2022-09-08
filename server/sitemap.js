@@ -24,14 +24,14 @@ async function sitemap(req, res) {
     xml += `<lastmod>2022-08-04</lastmod>`
     xml += '</url>'
 
-    const knownLastModifiedPath = 'scraper/data/lastMod.json'
+    const knownLastModifiedPath = path.join(__dirname, '..', 'scraper/data/lastMod.json')
     const routes = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'scraper/data/routes.json'), {encoding: 'utf8'}))
     const knownLastModified = fs.existsSync(knownLastModifiedPath)
         ? JSON.parse(fs.readFileSync(knownLastModifiedPath, {encoding: 'utf8'}))
         : {}
 
     async function getLastModified(path) {
-        const fullPath = `scraper/data/laws/${routes[path]}`
+        const fullPath = path.join(__dirname, '..', `scraper/data/laws/${routes[path]}`)
         const content = fs.readFileSync(fullPath, {encoding: 'utf8'})
         const contentHash = createHash('md5').update(content).digest('hex')
         if (!knownLastModified[contentHash]) {
