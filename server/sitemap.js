@@ -30,8 +30,8 @@ async function sitemap(req, res) {
         ? JSON.parse(fs.readFileSync(knownLastModifiedPath, {encoding: 'utf8'}))
         : {}
 
-    async function getLastModified(path) {
-        const fullPath = path.join(__dirname, '..', `scraper/data/laws/${routes[path]}`)
+    async function getLastModified(jsonPath) {
+        const fullPath = path.join(__dirname, '..', `scraper/data/laws/${routes[jsonPath]}`)
         const content = fs.readFileSync(fullPath, {encoding: 'utf8'})
         const contentHash = createHash('md5').update(content).digest('hex')
         if (!knownLastModified[contentHash]) {
