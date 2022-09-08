@@ -16,15 +16,18 @@ if (process.env.DEPLOY_ENV === 'nginx')
 app.use(shrinkRay())
 
 app.use((req, res, next) => {
-    const allowedSuffixes = ['.css', '.map', 'script.js', '.ttf', '.woff2', '.png', '.ico']
+    const allowedSuffixes = ['.css', '.map', 'script.js', '.ttf', '.woff2', '.png', '.ico', '.xml']
     const isAllowed = path =>
         allowedSuffixes.map(suffix => path.endsWith(suffix)).includes(true)
 
     if (req.method !== 'GET' || !isAllowed(req.path)) return next()
 
     const filePath = path.join(__dirname, 'build', req.path)
-    if (!fs.existsSync(filePath))
+    if (!fs.existsSync(filePath)) {
+        if (req.path === '/sitemap.xml')
+            return next()
         return res.status(404).end()
+    }
 
     res.sendFile(filePath)
 })

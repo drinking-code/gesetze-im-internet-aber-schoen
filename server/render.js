@@ -10,7 +10,7 @@ const minifierOptions = require('../config/html-minifier-options')
 const stats = require('./stats')
 const errorHtml = fs.readFileSync('public/error.html', {encoding: 'utf8'})
 
-const cache = new Map()
+// const cache = new Map()
 
 const builtFile = './build/index.js'
 
@@ -18,8 +18,8 @@ async function render(req, res, next) {
     const startTime = performance.now()
     const timestamp = Date.now()
     if (req.method !== 'GET') return next()
-    if (process.env.NODE_ENV === 'production' && cache.has(req.url))
-        return res.send(cache.get(req.url))
+    // if (process.env.NODE_ENV === 'production' && cache.has(req.url))
+    //     return res.send(cache.get(req.url))
 
     let htmlString
     const status = {
@@ -40,7 +40,7 @@ async function render(req, res, next) {
     if (status._404)
         res.status(404)
     res.send(htmlString)
-    cache.set(req.url, htmlString)
+    // cache.set(req.url, htmlString)
     const endTime = performance.now()
     stats.push({
         startTime, endTime, timestamp,

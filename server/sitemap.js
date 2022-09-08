@@ -52,6 +52,7 @@ async function sitemap(req, res) {
 
     sitemapCache = xml
     fs.writeFileSync(knownLastModifiedPath, JSON.stringify(knownLastModified), {encoding: 'utf8'})
+    fs.writeFileSync('build/sitemap.xml', xml, {encoding: 'utf8'})
 }
 
 module.exports = sitemap
