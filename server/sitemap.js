@@ -1,6 +1,7 @@
 const fs = require('fs')
 const fsPromises = require('fs/promises')
 const {createHash} = require('crypto')
+const path = require('path')
 
 let sitemapCache
 
@@ -24,7 +25,7 @@ async function sitemap(req, res) {
     xml += '</url>'
 
     const knownLastModifiedPath = 'scraper/data/lastMod.json'
-    const routes = JSON.parse(fs.readFileSync('scraper/data/routes.json', {encoding: 'utf8'}))
+    const routes = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'scraper/data/routes.json'), {encoding: 'utf8'}))
     const knownLastModified = fs.existsSync(knownLastModifiedPath)
         ? JSON.parse(fs.readFileSync(knownLastModifiedPath, {encoding: 'utf8'}))
         : {}
@@ -52,7 +53,7 @@ async function sitemap(req, res) {
 
     sitemapCache = xml
     fs.writeFileSync(knownLastModifiedPath, JSON.stringify(knownLastModified), {encoding: 'utf8'})
-    fs.writeFileSync('build/sitemap.xml', xml, {encoding: 'utf8'})
+    fs.writeFileSync(path.join(__dirname, '..', 'build/sitemap.xml'), xml, {encoding: 'utf8'})
 }
 
 module.exports = sitemap
