@@ -37,12 +37,16 @@ export default function Document({status}) {
 
     const host = 'https://gesetze-im-internet-aber-schoen.info'
     const aboutPathEscaped = escapeNonSlash('/über')
+    const nonLawPaths = {
+        '/suche': searchParams.get('q'),
+        [escapeNonSlash('/über')]: 'Über',
+        '/alle': 'Alle Gesetze',
+    }
 
     const title = [
         !!lawData && lawData.abbr,
-        location.pathname === '/suche' && searchParams.get('q'),
-        location.pathname === aboutPathEscaped && 'Über',
-        !['/suche', aboutPathEscaped, '/'].includes(location.pathname) && notFound && 'Nicht gefunden',
+        nonLawPaths[location.pathname],
+        ![...Object.keys(nonLawPaths), '/'].includes(location.pathname) && notFound && 'Nicht gefunden',
         'Gesetze im Internet; aber schön'
     ].filter(v => !!v).join(' - ')
 
@@ -77,7 +81,7 @@ export default function Document({status}) {
             <meta name='robots' content='index, follow'/>
             <title>{title}</title>
             <link rel={'stylesheet'} href={'/style.css'}/>
-            {!notFound && <script src={'/script.js'} defer/>}
+            {(!notFound || location.pathname === '/alle') && <script src={'/script.js'} defer/>}
             {location.pathname === '/' &&
                 <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(LDJson)}}/>
             }

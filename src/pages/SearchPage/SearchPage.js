@@ -6,6 +6,7 @@ import {useSearchParams} from 'react-router-dom'
 
 import SearchBar from '../../elements/SearchBar'
 import Logo from '../../elements/Logo/Logo'
+import Item from '../../elements/ListItem'
 import {makeIndex, idMap, TEXT_ONLY_LAWS_DIR} from './flexsearch-index'
 import markText from './mark-text'
 import truncateToMarked from './truncate-to-marked'
@@ -99,21 +100,5 @@ export default function SearchPage() {
                 })}
             </ol>
         </Fragment>
-    )
-}
-
-function Item({link, isFullLaw, title, subtitle, children, className}) {
-    return (
-        <li>
-            <a href={link}>
-                <article className={cl(styles.result, isFullLaw && styles.law, className)}>
-                    <h2 className={styles.resultHeading}>
-                        <span className={styles.main}>{title}</span>
-                        {subtitle && <span className={styles.appendix}>{subtitle}</span>}
-                    </h2>
-                    {children}
-                </article>
-            </a>
-        </li>
     )
 }

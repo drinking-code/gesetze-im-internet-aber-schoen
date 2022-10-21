@@ -1,0 +1,51 @@
+.main {
+  padding: min(3rem, 8vw) max(10vw, calc(100vw - 10vw - 45rem)) 1rem 10vw;
+  max-height: 100vh;
+  box-sizing: border-box;
+
+  overflow-y: auto;
+
+  h2.unFancy {
+    text-shadow: none;
+
+    span.unFancy {
+      text-decoration: underline;
+      &:before {
+        content: none;
+      }
+    }
+  }
+}
+
+.letterAnchors {
+  position: fixed;
+  top: 0;
+  right: 1rem;
+  @media (min-width: 1080px) {
+    right: 3rem;
+  }
+  height: 100vh;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+  font-size: min(calc(100vh / 42), 1rem);
+  opacity: .8;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  cursor: pointer;
+
+  li {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.removeWrapperStyles {
+  padding: 0;
+  height: auto;
+}

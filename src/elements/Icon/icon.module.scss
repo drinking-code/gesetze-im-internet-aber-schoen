@@ -15,6 +15,10 @@
     mask-image: url('./icons/arrow-right-long.svg');
   }
 
+  &.book {
+    mask-image: url('./icons/book.svg');
+  }
+
   &.externalLink {
     mask-image: url('./icons/external-link.svg');
   }

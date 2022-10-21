@@ -109,6 +109,8 @@
     .main {
       position: relative;
 
+      text-shadow: none;
+
       &:before {
         content: '';
         position: absolute;
