@@ -1,9 +1,9 @@
 import {cl} from '../../utils/classNames'
 import styles from '../../pages/SearchPage/search-page.module.scss'
 
-export default function Item({link, isFullLaw, title, subtitle, children, className, headingClassName, headingSpanClassName, id}) {
+export default function Item({link, isFullLaw, title, subtitle, children, className, headingClassName, headingSpanClassName, ...props}) {
     return (
-        <li id={id}>
+        <li {...props}>
             <a href={link}>
                 <article className={cl(styles.result, isFullLaw && styles.law, className)}>
                     <h2 className={cl(styles.resultHeading, headingClassName)}>

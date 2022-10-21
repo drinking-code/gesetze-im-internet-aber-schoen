@@ -50,13 +50,14 @@ const index = Array.from(Object.keys(routes))
         const firstLetter = law.asciiAbbr && law.asciiAbbr[0]
             .toUpperCase()
             .replace(/[^A-Z]/, '#')
-        if (firstLetter && firstLetter !== letters[letters.length - 1]) {
+        const firstOfLetter = firstLetter && firstLetter !== letters[letters.length - 1]
+        if (firstOfLetter) {
             letters.push(firstLetter)
         }
         return (
             <Item key={law.route} link={`/${law.route}`} title={law.abbr} isFullLaw={true}
-                  headingClassName={styles.unFancy}
-                  headingSpanClassName={styles.unFancy}>
+                  headingClassName={styles.unFancy} headingSpanClassName={styles.unFancy}
+                  data-letter={firstOfLetter ? firstLetter : null}>
                 <span className={searchStyles.fullTitle}>{law.title}</span>
             </Item>
         )
