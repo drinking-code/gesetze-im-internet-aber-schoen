@@ -1,1 +1,1 @@
-export {default} from '../AllPage'
+export {default} from './AllPage'

@@ -1,1 +1,1 @@
-export {default} from '../AboutPage'
+export {default} from './AboutPage'
