@@ -35,7 +35,7 @@ export default function Document({status}) {
         notFound = true
     }
 
-    const host = 'https://gesetze-im-internet-aber-schoen.info'
+    const host = 'https://gesetze-aber-schoen.de'
     const aboutPathEscaped = escapeNonSlash('/über')
     const nonLawPaths = {
         '/suche': searchParams.get('q'),
