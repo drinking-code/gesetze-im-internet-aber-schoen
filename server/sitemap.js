@@ -12,7 +12,7 @@ async function sitemap(req, res) {
 
     let xml = '<?xml version="1.0" encoding="UTF-8"?>'
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-    const domain = 'https://gesetze-im-internet-aber-schoen.info'
+    const domain = 'https://gesetze-aber-schoen.de'
 
     xml += '<url>'
     xml += `<loc>${domain}</loc>`

@@ -15,7 +15,7 @@ class CustomResourceLoader extends ResourceLoader {
 }
 
 const resourceLoader = new CustomResourceLoader({
-    userAgent: `Mozilla/5.0 (${process.platform || "unknown OS"}) AppleWebKit/537.36 (KHTML, like Gecko) gesetze-im-internet-aber-schoen.info/0.1 (Softdrink scraper)`,
+    userAgent: `Mozilla/5.0 (${process.platform || "unknown OS"}) AppleWebKit/537.36 (KHTML, like Gecko) gesetze-aber-schoen.de/0.1 (Softdrink scraper)`,
 });
 
 function getHtmlVersionLink(dom) {
